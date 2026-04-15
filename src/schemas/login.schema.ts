@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
-export const registerSchema = z.object({
-  username: z.string().min(1, 'Nome do usuário é obrigatório'),
+export const loginSchema = z.object({
   email: z.email('Email inválido').min(1, 'Email do usuário é obrigatório'),
   password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
 });
 
-export type RegisterSchemaType = z.infer<typeof registerSchema>;
+export type LoginSchemaType = z.infer<typeof loginSchema>;

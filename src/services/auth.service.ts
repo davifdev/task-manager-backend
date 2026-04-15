@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs';
-import type { RegisterSchema } from '../schemas/register.schema';
+import type { RegisterSchemaType } from '../schemas/register.schema';
 import { generateAccessToken, generateRefreshToken } from '../helpers/tokens';
 import { userRepository } from '../repository/user/user.repository';
+import type { LoginSchemaType } from '../schemas/login.schema';
 
-export const registerService = async (body: RegisterSchema) => {
+const registerService = async (body: RegisterSchemaType) => {
   const { username, email, password } = body;
   const hashedPassword = bcrypt.hashSync(password, 10);
 
@@ -25,4 +26,31 @@ export const registerService = async (body: RegisterSchema) => {
   };
 };
 
-export const login = () => {};
+const loginService = async (body: LoginSchemaType) => {
+  const { email, password } = body;
+
+  const user = await userRepository.findByEmail(email);
+
+  if (!user) {
+    return null;
+  }
+
+  const passwordCompare = bcrypt.compare(password, user.password);
+
+  if (!passwordCompare) {
+    return null;
+  }
+
+  const accessToken = generateAccessToken(user.id);
+  const refreshToken = generateRefreshToken(user.id);
+
+  return {
+    email,
+    tokens: {
+      accessToken,
+      refreshToken,
+    },
+  };
+};
+
+export { registerService, loginService };

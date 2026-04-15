@@ -31,4 +31,4 @@ class UserRepository implements IUserRepository {
   }
 }
 
-export const userRepository: IUserRepository = new UserRepository(db);
+export const userRepository = new UserRepository(db);

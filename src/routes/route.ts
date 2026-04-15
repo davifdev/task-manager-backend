@@ -1,9 +1,14 @@
 import { Router } from 'express';
 import { validateResgister } from '../middlewares/register.validation';
-import { registerController } from '../controllers/auth.controller';
+import {
+  loginController,
+  registerController,
+} from '../controllers/auth.controller';
+import { validateLogin } from '../middlewares/login.validation';
 
 const router = Router();
 
 router.post('/register', validateResgister, registerController);
+router.post('/login', validateLogin, loginController);
 
 export { router };
