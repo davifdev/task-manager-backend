@@ -1,6 +1,11 @@
 import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 import type { RegisterSchemaType } from '../schemas/register.schema';
-import { generateAccessToken, generateRefreshToken } from '../helpers/tokens';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  hashToken,
+} from '../helpers/tokens';
 import { userRepository } from '../repository/user/user.repository';
 import type { LoginSchemaType } from '../schemas/login.schema';
 
@@ -43,6 +48,15 @@ const loginService = async (body: LoginSchemaType) => {
 
   const accessToken = generateAccessToken(user.id);
   const refreshToken = generateRefreshToken(user.id);
+
+  const familyId = uuidv4();
+
+  await userRepository.refreshToken({
+    tokenHash: hashToken(refreshToken),
+    userId: user.id,
+    familyId,
+    expiresAt: new Date(Date.now() * 30 * 24 * 60 * 60 * 1000),
+  });
 
   return {
     email,

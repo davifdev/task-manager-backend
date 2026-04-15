@@ -20,7 +20,7 @@ const loginController = async (req: Request, res: Response) => {
     const loginResult = await loginService(req.body);
     if (!loginResult) {
       return res.status(401).json({
-        message: 'Unauthorized',
+        message: 'Invalid email or password',
       });
     }
     res.status(200).json({

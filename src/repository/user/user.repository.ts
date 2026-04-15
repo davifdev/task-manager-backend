@@ -1,4 +1,4 @@
-import type { User } from '../../../generated/prisma/browser';
+import type { RefreshToken, User } from '../../../generated/prisma/browser';
 import type { PrismaClient } from '../../../generated/prisma/client';
 import { db } from '../../../lib/prisma';
 import type { IUserRepository } from './user.contract';
@@ -7,6 +7,13 @@ export type CreateUserDTO = {
   username: string;
   email: string;
   password: string;
+};
+
+export type RefreshTokenDTO = {
+  tokenHash: string;
+  userId: string;
+  familyId: string;
+  expiresAt: Date;
 };
 
 class UserRepository implements IUserRepository {
@@ -27,6 +34,12 @@ class UserRepository implements IUserRepository {
       where: {
         email,
       },
+    });
+  }
+
+  async refreshToken(data: RefreshTokenDTO): Promise<RefreshToken> {
+    return this.db.refreshToken.create({
+      data,
     });
   }
 }
