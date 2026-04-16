@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import type { RegisterSchemaType } from '../schemas/register.schema';
@@ -8,6 +9,8 @@ import {
 } from '../helpers/tokens';
 import { userRepository } from '../repository/user/user.repository';
 import type { LoginSchemaType } from '../schemas/login.schema';
+import type { RefreshTokenSchemaType } from '../schemas/refreshToken.schema';
+import jwt from 'jsonwebtoken';
 
 const registerService = async (body: RegisterSchemaType) => {
   const { username, email, password } = body;
@@ -35,12 +38,12 @@ const loginService = async (body: LoginSchemaType) => {
   const { email, password } = body;
 
   const user = await userRepository.findByEmail(email);
-
+  console.log(user);
   if (!user) {
     return null;
   }
 
-  const passwordCompare = bcrypt.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
     return null;
@@ -55,7 +58,7 @@ const loginService = async (body: LoginSchemaType) => {
     tokenHash: hashToken(refreshToken),
     userId: user.id,
     familyId,
-    expiresAt: new Date(Date.now() * 30 * 24 * 60 * 60 * 1000),
+    expiresAt: new Date(Date.now()),
   });
 
   return {
@@ -67,4 +70,66 @@ const loginService = async (body: LoginSchemaType) => {
   };
 };
 
-export { registerService, loginService };
+const refreshTokenService = async (header: RefreshTokenSchemaType) => {
+  const { refreshToken: oldToken } = header;
+
+  const errors = {
+    error: false,
+    status: '',
+  };
+
+  if (!oldToken) {
+    errors.error = true;
+    errors.status = '401';
+    return;
+  }
+
+  const hashed = hashToken(oldToken);
+  const storedToken = await userRepository.getRefreshToken(hashed);
+
+  if (!storedToken) {
+    errors.error = true;
+    errors.status = '403';
+    return;
+  }
+
+  if (storedToken.revoked) {
+    await userRepository.updateManyRefreshToken(storedToken);
+    errors.error = true;
+    errors.status = '403';
+    return;
+  }
+
+  const payload = jwt.verify(oldToken, process.env.SECRET_REFRESH_KEY!) as {
+    id: string;
+  };
+
+  if (!payload) {
+    errors.error = true;
+    errors.status = '403';
+    return;
+  }
+
+  await userRepository.updateRefreshToken(storedToken);
+
+  const accessToken = generateAccessToken(payload.id);
+  const refreshToken = generateRefreshToken(payload.id);
+  console.log('Parei Aqui no token;');
+
+  await userRepository.refreshToken({
+    tokenHash: hashToken(refreshToken),
+    userId: payload.id,
+    familyId: storedToken.id,
+    expiresAt: new Date(Date.now()),
+  });
+
+  return {
+    errors,
+    tokens: {
+      accessToken,
+      refreshToken,
+    },
+  };
+};
+
+export { registerService, loginService, refreshTokenService };

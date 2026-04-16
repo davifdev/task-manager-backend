@@ -10,6 +10,7 @@ export type CreateUserDTO = {
 };
 
 export type RefreshTokenDTO = {
+  id?: string;
   tokenHash: string;
   userId: string;
   familyId: string;
@@ -40,6 +41,28 @@ class UserRepository implements IUserRepository {
   async refreshToken(data: RefreshTokenDTO): Promise<RefreshToken> {
     return this.db.refreshToken.create({
       data,
+    });
+  }
+
+  async getRefreshToken(hashed: string): Promise<RefreshToken | null> {
+    return this.db.refreshToken.findUnique({
+      where: {
+        tokenHash: hashed,
+      },
+    });
+  }
+
+  async updateManyRefreshToken(storedToken: RefreshTokenDTO) {
+    return this.db.refreshToken.updateMany({
+      where: { familyId: storedToken.familyId },
+      data: { revoked: true },
+    });
+  }
+
+  async updateRefreshToken(storedToken: RefreshTokenDTO) {
+    return this.db.refreshToken.update({
+      where: { id: storedToken.id! },
+      data: { revoked: true },
     });
   }
 }
