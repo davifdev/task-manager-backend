@@ -7,10 +7,19 @@ import {
 
 const registerController = async (req: Request, res: Response) => {
   try {
-    const { email, tokens } = await registerService(req.body);
+    const registerResult = await registerService(req.body);
+
+    const accessToken = registerResult.tokens.accessToken;
+    const refreshToken = registerResult.tokens.refreshToken;
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+
     res.status(201).json({
-      email,
-      tokens,
+      email: registerResult.email,
+      accessToken,
     });
   } catch (error) {
     res.status(400).json({
@@ -22,14 +31,24 @@ const registerController = async (req: Request, res: Response) => {
 const loginController = async (req: Request, res: Response) => {
   try {
     const loginResult = await loginService(req.body);
+
     if (!loginResult) {
       return res.status(401).json({
         message: 'Invalid email or password',
       });
     }
+
+    const accessToken = loginResult.tokens.accessToken;
+    const refreshToken = loginResult.tokens.refreshToken;
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+
     res.status(200).json({
       email: loginResult.email,
-      tokens: loginResult.tokens,
+      accessToken,
     });
   } catch (error) {
     res.status(400).json({
@@ -40,7 +59,7 @@ const loginController = async (req: Request, res: Response) => {
 
 const refreshTokenController = async (req: Request, res: Response) => {
   try {
-    const refreshToken = await refreshTokenService(req.body);
+    const refreshToken = await refreshTokenService(req.cookies);
     if (!refreshToken) {
       return res.status(401).json({
         status: 'Unauthorized',
@@ -56,13 +75,17 @@ const refreshTokenController = async (req: Request, res: Response) => {
         message: 'Forbidden',
       });
     }
+
     const newAccessToken = refreshToken.tokens.accessToken;
     const newRefreshToken = refreshToken.tokens.refreshToken;
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+
     res.status(200).json({
-      tokens: {
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-      },
+      accessToken: newAccessToken,
     });
   } catch (error) {
     res.status(500).json({

@@ -25,6 +25,15 @@ const registerService = async (body: RegisterSchemaType) => {
   const accessToken = generateAccessToken(user.id);
   const refreshToken = generateRefreshToken(user.id);
 
+  const familyId = uuidv4();
+
+  await userRepository.refreshToken({
+    tokenHash: hashToken(refreshToken),
+    userId: user.id,
+    familyId,
+    expiresAt: new Date(Date.now()),
+  });
+
   return {
     email,
     tokens: {
@@ -38,7 +47,7 @@ const loginService = async (body: LoginSchemaType) => {
   const { email, password } = body;
 
   const user = await userRepository.findByEmail(email);
-  console.log(user);
+
   if (!user) {
     return null;
   }
@@ -70,8 +79,8 @@ const loginService = async (body: LoginSchemaType) => {
   };
 };
 
-const refreshTokenService = async (header: RefreshTokenSchemaType) => {
-  const { refreshToken: oldToken } = header;
+const refreshTokenService = async (body: RefreshTokenSchemaType) => {
+  const oldToken = body.refreshToken;
 
   const errors = {
     error: false,
@@ -114,7 +123,6 @@ const refreshTokenService = async (header: RefreshTokenSchemaType) => {
 
   const accessToken = generateAccessToken(payload.id);
   const refreshToken = generateRefreshToken(payload.id);
-  console.log('Parei Aqui no token;');
 
   await userRepository.refreshToken({
     tokenHash: hashToken(refreshToken),
