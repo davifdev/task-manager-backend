@@ -11,6 +11,7 @@ import { userRepository } from '../repository/user/user.repository';
 import type { LoginSchemaType } from '../schemas/login.schema';
 import type { RefreshTokenSchemaType } from '../schemas/refreshToken.schema';
 import jwt from 'jsonwebtoken';
+import type { LogoutSchemaType } from '../schemas/logout.schema';
 
 const registerService = async (body: RegisterSchemaType) => {
   const { username, email, password } = body;
@@ -140,4 +141,17 @@ const refreshTokenService = async (body: RefreshTokenSchemaType) => {
   };
 };
 
-export { registerService, loginService, refreshTokenService };
+const logoutService = async (body: LogoutSchemaType) => {
+  const token = body.refreshToken;
+
+  if (token) {
+    await userRepository.logout(token);
+  }
+
+  return {
+    message: 'Logged out successfully',
+    status: '204',
+  };
+};
+
+export { registerService, loginService, refreshTokenService, logoutService };

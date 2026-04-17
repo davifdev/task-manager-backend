@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import {
   loginService,
+  logoutService,
   refreshTokenService,
   registerService,
 } from '../services/auth.service';
@@ -59,7 +60,9 @@ const loginController = async (req: Request, res: Response) => {
 
 const refreshTokenController = async (req: Request, res: Response) => {
   try {
-    const refreshToken = await refreshTokenService(req.cookies);
+    const refreshToken = await refreshTokenService({
+      refreshToken: req.cookies.refreshToken,
+    });
     if (!refreshToken) {
       return res.status(401).json({
         status: 'Unauthorized',
@@ -94,4 +97,29 @@ const refreshTokenController = async (req: Request, res: Response) => {
   }
 };
 
-export { registerController, loginController, refreshTokenController };
+const logoutController = async (req: Request, res: Response) => {
+  console.log(req.cookies);
+  try {
+    const logoutResult = await logoutService({
+      refreshToken: req.cookies.refreshToken,
+    });
+
+    if (logoutResult.status === '204') {
+      res.clearCookie('refreshToken');
+      res.status(204).json({
+        message: logoutResult.message,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : 'Unexpected error',
+    });
+  }
+};
+
+export {
+  registerController,
+  loginController,
+  refreshTokenController,
+  logoutController,
+};

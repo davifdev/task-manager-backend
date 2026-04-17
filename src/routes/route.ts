@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validateResgister } from '../middlewares/register.validation';
 import {
   loginController,
+  logoutController,
   refreshTokenController,
   registerController,
 } from '../controllers/auth.controller';
@@ -12,5 +13,6 @@ const router = Router();
 router.post('/register', validateResgister, registerController);
 router.post('/login', validateLogin, loginController);
 router.post('/refresh-token', refreshTokenController);
+router.post('/logout', logoutController);
 
 export { router };

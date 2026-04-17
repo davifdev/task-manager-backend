@@ -1,7 +1,8 @@
+import { db } from '../../../lib/prisma';
 import type { RefreshToken, User } from '../../../generated/prisma/browser';
 import type { PrismaClient } from '../../../generated/prisma/client';
-import { db } from '../../../lib/prisma';
 import type { IUserRepository } from './user.contract';
+import { hashToken } from '../../helpers/tokens';
 
 export type CreateUserDTO = {
   username: string;
@@ -63,6 +64,17 @@ class UserRepository implements IUserRepository {
     return this.db.refreshToken.update({
       where: { id: storedToken.id! },
       data: { revoked: true },
+    });
+  }
+
+  async logout(token: string) {
+    await this.db.refreshToken.updateMany({
+      where: {
+        tokenHash: hashToken(token),
+      },
+      data: {
+        revoked: true,
+      },
     });
   }
 }
