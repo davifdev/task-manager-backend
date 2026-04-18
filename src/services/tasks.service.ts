@@ -1,5 +1,6 @@
 import { taskRepository } from '../repository/tasks/tasks.repository';
-import type { CreateSchemaType } from '../schemas/getTasks.schema';
+import type { CreateSchemaType } from '../schemas/createTask.schema';
+import type { UpdateSchemaType } from '../schemas/updateSchema';
 
 const getAllTasksServices = async (userId: string) => {
   const tasks = await taskRepository.listTasks(userId);
@@ -14,4 +15,17 @@ const deleteTaskService = async (taskId: string) => {
   await taskRepository.deleteTask(taskId);
 };
 
-export { getAllTasksServices, createTaskService, deleteTaskService };
+const updateTaskService = async (
+  taskId: string,
+  data: UpdateSchemaType,
+  userId: string,
+) => {
+  await taskRepository.updateTask(taskId, { ...data, userId });
+};
+
+export {
+  getAllTasksServices,
+  createTaskService,
+  deleteTaskService,
+  updateTaskService,
+};

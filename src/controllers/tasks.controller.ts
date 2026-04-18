@@ -2,6 +2,7 @@ import {
   createTaskService,
   deleteTaskService,
   getAllTasksServices,
+  updateTaskService,
 } from '../services/tasks.service';
 import type { Request, Response } from 'express';
 
@@ -57,4 +58,28 @@ const deleteTaskController = async (req: Request, res: Response) => {
   }
 };
 
-export { getAllTasksController, createTaskController, deleteTaskController };
+const updateTaskController = async (req: Request, res: Response) => {
+  const taskId = req.params.id as string;
+  const userId = req.userId;
+  const data = req.body;
+  if (!userId) return;
+
+  try {
+    await updateTaskService(taskId, data, userId);
+    res.status(200).json({ message: 'Task updated successfully' });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : 'error occurred while updating task.',
+    });
+  }
+};
+
+export {
+  getAllTasksController,
+  createTaskController,
+  deleteTaskController,
+  updateTaskController,
+};

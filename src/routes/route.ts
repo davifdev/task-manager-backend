@@ -12,8 +12,10 @@ import {
   createTaskController,
   deleteTaskController,
   getAllTasksController,
+  updateTaskController,
 } from '../controllers/tasks.controller';
 import { validateCreateTask } from '../middlewares/createTask.validation';
+import { validateUpdateTask } from '../middlewares/updateTask.validation';
 
 const router = Router();
 
@@ -27,5 +29,11 @@ router.post('/logout', logoutController);
 router.get('/tasks', authMiddleware, getAllTasksController);
 router.post('/tasks', authMiddleware, validateCreateTask, createTaskController);
 router.delete('/tasks/:id', authMiddleware, deleteTaskController);
+router.put(
+  '/tasks/:id',
+  authMiddleware,
+  validateUpdateTask,
+  updateTaskController,
+);
 
 export { router };

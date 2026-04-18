@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from 'express';
-import { createTaskSchema } from '../schemas/createTask.schema';
+import { updateTaskSchema } from '../schemas/updateSchema';
 
-export const validateCreateTask = (
+export const validateUpdateTask = (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const validationObj = createTaskSchema.safeParse(req.body);
+  const validationObj = updateTaskSchema.safeParse(req.body);
   if (!validationObj.success) {
     return res.status(400).send({ errors: validationObj.error.issues });
   }
