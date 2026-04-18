@@ -1,12 +1,13 @@
 import {
   createTaskService,
+  deleteTaskService,
   getAllTasksServices,
 } from '../services/tasks.service';
 import type { Request, Response } from 'express';
 
 const getAllTasksController = async (req: Request, res: Response) => {
   const userId = req.userId;
-  if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+  if (!userId) return;
 
   try {
     const tasks = await getAllTasksServices(userId);
@@ -23,7 +24,7 @@ const getAllTasksController = async (req: Request, res: Response) => {
 
 const createTaskController = async (req: Request, res: Response) => {
   const userId = req.userId;
-  if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+  if (!userId) return;
 
   const data = req.body;
 
@@ -40,4 +41,20 @@ const createTaskController = async (req: Request, res: Response) => {
   }
 };
 
-export { getAllTasksController, createTaskController };
+const deleteTaskController = async (req: Request, res: Response) => {
+  const taskId = req.params.id as string;
+
+  try {
+    await deleteTaskService(taskId);
+    res.status(200).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : 'error occurred while deleting task.',
+    });
+  }
+};
+
+export { getAllTasksController, createTaskController, deleteTaskController };

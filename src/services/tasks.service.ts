@@ -10,4 +10,8 @@ const createTaskService = async (data: CreateSchemaType, userId: string) => {
   await taskRepository.createTask({ ...data, userId });
 };
 
-export { getAllTasksServices, createTaskService };
+const deleteTaskService = async (taskId: string) => {
+  await taskRepository.deleteTask(taskId);
+};
+
+export { getAllTasksServices, createTaskService, deleteTaskService };

@@ -10,6 +10,7 @@ import { validateLogin } from '../middlewares/login.validation';
 import { authMiddleware } from '../middlewares/auth';
 import {
   createTaskController,
+  deleteTaskController,
   getAllTasksController,
 } from '../controllers/tasks.controller';
 import { validateCreateTask } from '../middlewares/createTask.validation';
@@ -25,5 +26,6 @@ router.post('/logout', logoutController);
 // Task routes
 router.get('/tasks', authMiddleware, getAllTasksController);
 router.post('/tasks', authMiddleware, validateCreateTask, createTaskController);
+router.delete('/tasks/:id', authMiddleware, deleteTaskController);
 
 export { router };
