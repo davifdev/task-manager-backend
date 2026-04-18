@@ -49,6 +49,20 @@ export class TasksRepository {
     });
   }
 
+  async updateTaskStatus(
+    id: string,
+    status: 'pending' | 'in_progress' | 'completed',
+  ) {
+    await this.db.task.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
+      },
+    });
+  }
+
   async deleteTask(id: string) {
     await this.db.task.delete({
       where: {
@@ -57,8 +71,12 @@ export class TasksRepository {
     });
   }
 
-  async deleteAllTasks() {
-    await this.db.task.deleteMany();
+  async deleteAllTasks(userId: string) {
+    await this.db.task.deleteMany({
+      where: {
+        userId,
+      },
+    });
   }
 }
 

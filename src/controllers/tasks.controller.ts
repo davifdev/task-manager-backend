@@ -1,8 +1,10 @@
 import {
   createTaskService,
+  deleteAllTasksService,
   deleteTaskService,
   getAllTasksServices,
   updateTaskService,
+  updateTaskStatusService,
 } from '../services/tasks.service';
 import type { Request, Response } from 'express';
 
@@ -58,6 +60,22 @@ const deleteTaskController = async (req: Request, res: Response) => {
   }
 };
 
+const deleteAllTasksController = async (req: Request, res: Response) => {
+  const userId = req.userId;
+  if (!userId) return;
+  try {
+    await deleteAllTasksService(userId);
+    res.status(200).json({ message: 'All tasks deleted successfully' });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : 'error occurred while deleting all task.',
+    });
+  }
+};
+
 const updateTaskController = async (req: Request, res: Response) => {
   const taskId = req.params.id as string;
   const userId = req.userId;
@@ -77,9 +95,28 @@ const updateTaskController = async (req: Request, res: Response) => {
   }
 };
 
+const updateTaskStatusController = async (req: Request, res: Response) => {
+  const taskId = req.params.id as string;
+  const { status } = req.body;
+
+  try {
+    await updateTaskStatusService(taskId, status);
+    res.status(200).json({ message: 'Task status updated successfully' });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : 'error occurred while updating status task.',
+    });
+  }
+};
+
 export {
   getAllTasksController,
   createTaskController,
   deleteTaskController,
+  deleteAllTasksController,
   updateTaskController,
+  updateTaskStatusController,
 };

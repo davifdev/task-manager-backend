@@ -10,12 +10,15 @@ import { validateLogin } from '../middlewares/login.validation';
 import { authMiddleware } from '../middlewares/auth';
 import {
   createTaskController,
+  deleteAllTasksController,
   deleteTaskController,
   getAllTasksController,
   updateTaskController,
+  updateTaskStatusController,
 } from '../controllers/tasks.controller';
 import { validateCreateTask } from '../middlewares/createTask.validation';
 import { validateUpdateTask } from '../middlewares/updateTask.validation';
+import { validateUpdateTaskStatus } from '../middlewares/updateTaskStatus.validation';
 
 const router = Router();
 
@@ -28,12 +31,19 @@ router.post('/logout', logoutController);
 // Task routes
 router.get('/tasks', authMiddleware, getAllTasksController);
 router.post('/tasks', authMiddleware, validateCreateTask, createTaskController);
-router.delete('/tasks/:id', authMiddleware, deleteTaskController);
 router.put(
   '/tasks/:id',
   authMiddleware,
   validateUpdateTask,
   updateTaskController,
 );
+router.patch(
+  '/tasks/status/:id',
+  authMiddleware,
+  validateUpdateTaskStatus,
+  updateTaskStatusController,
+);
+router.delete('/tasks/:id', authMiddleware, deleteTaskController);
+router.delete('/tasks', authMiddleware, deleteAllTasksController);
 
 export { router };

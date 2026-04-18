@@ -15,6 +15,10 @@ const deleteTaskService = async (taskId: string) => {
   await taskRepository.deleteTask(taskId);
 };
 
+const deleteAllTasksService = async (userId: string) => {
+  await taskRepository.deleteAllTasks(userId);
+};
+
 const updateTaskService = async (
   taskId: string,
   data: UpdateSchemaType,
@@ -23,9 +27,18 @@ const updateTaskService = async (
   await taskRepository.updateTask(taskId, { ...data, userId });
 };
 
+const updateTaskStatusService = async (
+  taskId: string,
+  status: 'pending' | 'in_progress' | 'completed',
+) => {
+  await taskRepository.updateTaskStatus(taskId, status);
+};
+
 export {
   getAllTasksServices,
   createTaskService,
   deleteTaskService,
+  deleteAllTasksService,
   updateTaskService,
+  updateTaskStatusService,
 };
