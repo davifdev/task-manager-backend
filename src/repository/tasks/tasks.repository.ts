@@ -1,7 +1,7 @@
 import type { PrismaClient } from '../../../generated/prisma/client';
 import { db } from '../../../lib/prisma';
 
-type TaskDTO = {
+export type TaskDTO = {
   title: string;
   description: string;
   userId: string;
