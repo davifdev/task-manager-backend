@@ -1,4 +1,5 @@
 import type { PrismaClient } from '../../../generated/prisma/client';
+import { db } from '../../../lib/prisma';
 
 type TaskDTO = {
   title: string;
@@ -22,11 +23,21 @@ export class TasksRepository {
   }
 
   async listTasks(userId: string) {
-    await this.db.task.findMany({
+    const tasks = await this.db.task.findMany({
       where: {
         userId,
       },
     });
+
+    const morningTasks = tasks.filter(task => task.time === 'morning');
+    const afternoonTasks = tasks.filter(task => task.time === 'afternoon');
+    const eveningTasks = tasks.filter(task => task.time === 'evening');
+
+    return {
+      morning: morningTasks,
+      afternoon: afternoonTasks,
+      evening: eveningTasks,
+    };
   }
 
   async updateTask(id: string, data: TaskDTO) {
@@ -45,4 +56,10 @@ export class TasksRepository {
       },
     });
   }
+
+  async deleteAllTasks() {
+    await this.db.task.deleteMany();
+  }
 }
+
+export const taskRepository = new TasksRepository(db);

@@ -16,7 +16,7 @@ export const authMiddleware = (
 
     const tokenPayload = jwt.verify(
       accessToken,
-      process.env.JWT_SECRET_KEY as string,
+      process.env.SECRET_KEY as string,
     ) as { userId: string };
 
     req.userId = tokenPayload.userId;
