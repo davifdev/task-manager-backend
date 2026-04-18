@@ -98,7 +98,6 @@ const refreshTokenController = async (req: Request, res: Response) => {
 };
 
 const logoutController = async (req: Request, res: Response) => {
-  console.log(req.cookies);
   try {
     const logoutResult = await logoutService({
       refreshToken: req.cookies.refreshToken,
