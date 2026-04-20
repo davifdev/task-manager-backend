@@ -74,7 +74,7 @@ const refreshTokenController = async (req: Request, res: Response) => {
       });
     }
     if (refreshToken.errors.error && refreshToken?.errors.status === '403') {
-      return res.status(401).json({
+      return res.status(403).json({
         message: 'Forbidden',
       });
     }

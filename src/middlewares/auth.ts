@@ -23,8 +23,8 @@ export const authMiddleware = (
 
     next();
   } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Internal Server Error',
+    res.status(401).json({
+      message: error instanceof Error ? error.message : 'Unauthorized',
     });
   }
 };
