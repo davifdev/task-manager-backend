@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { validateUpdateTask } from './updateTask.validation';
+import { validateUpdateTaskStatus } from './updateTaskStatus.validation';
 
 describe('validateUpdateTaskStatus (unit)', () => {
   let mockRequest: Partial<Request>;
@@ -22,7 +22,7 @@ describe('validateUpdateTaskStatus (unit)', () => {
       status: 'invalid_status',
     };
 
-    validateUpdateTask(
+    validateUpdateTaskStatus(
       mockRequest as Request,
       mockResponse as Response,
       mockNext as NextFunction,
@@ -30,5 +30,20 @@ describe('validateUpdateTaskStatus (unit)', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('deve retornar 200 se o status da tarefa for válido', () => {
+    mockRequest.body = {
+      status: 'in_progress',
+    };
+
+    validateUpdateTaskStatus(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext as NextFunction,
+    );
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockNext).toHaveBeenCalled();
   });
 });

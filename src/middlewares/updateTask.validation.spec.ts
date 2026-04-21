@@ -84,4 +84,21 @@ describe('validateUpdateTask (unit)', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockNext).not.toHaveBeenCalled();
   });
+  it('deve retornar 200 se os dados da tarefa forem válidos', () => {
+    mockRequest.body = {
+      title: 'Task title',
+      description: 'Task description',
+      status: 'in_progress',
+      time: 'morning',
+    };
+
+    validateUpdateTask(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext as NextFunction,
+    );
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockNext).toHaveBeenCalled();
+  });
 });

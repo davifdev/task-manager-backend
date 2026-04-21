@@ -21,7 +21,7 @@ describe('validateCreateTask (unit)', () => {
   it('deve retornar 400 se o título da tarefa não for fornecido', () => {
     mockRequest.body = {
       description: 'Task description',
-      status: 'not_started',
+      status: 'in_progress',
       time: 'morning',
     };
 
@@ -38,7 +38,7 @@ describe('validateCreateTask (unit)', () => {
   it('deve retornar 400 se a descrição da tarefa não for fornecida', () => {
     mockRequest.body = {
       title: 'Task title',
-      status: 'not_started',
+      status: 'in_progress',
       time: 'morning',
     };
 
@@ -73,7 +73,7 @@ describe('validateCreateTask (unit)', () => {
     mockRequest.body = {
       title: 'Task title',
       description: 'Task description',
-      status: 'not_started',
+      status: 'in_progress',
     };
 
     validateCreateTask(
@@ -84,5 +84,23 @@ describe('validateCreateTask (unit)', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('deve retornar 200 se os dados da tarefa forem válidos', () => {
+    mockRequest.body = {
+      title: 'Task title',
+      description: 'Task description',
+      status: 'in_progress',
+      time: 'morning',
+    };
+
+    validateCreateTask(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext as NextFunction,
+    );
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockNext).toHaveBeenCalled();
   });
 });
