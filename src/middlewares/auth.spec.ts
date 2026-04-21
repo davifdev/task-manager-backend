@@ -5,7 +5,7 @@ import { authMiddleware } from './auth';
 
 vi.mock('jsonwebtoken');
 
-describe('authMiddleware', () => {
+describe('authMiddleware (unit)', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   const mockNext: NextFunction = vi.fn();

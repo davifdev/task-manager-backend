@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import { validateCreateTask } from './createTask.validation';
+import { validateResgister } from './register.validation';
 
-describe('validateCreateTask (unit)', () => {
+describe('validateRegister (unit)', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   const mockNext: NextFunction = vi.fn();
@@ -18,14 +18,13 @@ describe('validateCreateTask (unit)', () => {
     };
   });
 
-  it('deve retornar 400 se o título da tarefa não for fornecido', () => {
+  it('deve retornar 400 se o nome de usuário não for fornecido', () => {
     mockRequest.body = {
-      description: 'Task description',
-      status: 'not_started',
-      time: 'morning',
+      email: 'email@exemplo.com',
+      password: 'validPassword123',
     };
 
-    validateCreateTask(
+    validateResgister(
       mockRequest as Request,
       mockResponse as Response,
       mockNext as NextFunction,
@@ -35,14 +34,13 @@ describe('validateCreateTask (unit)', () => {
     expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('deve retornar 400 se a descrição da tarefa não for fornecida', () => {
+  it('deve retornar 400 se o email não tiver o formato correto', () => {
     mockRequest.body = {
-      title: 'Task title',
-      status: 'not_started',
-      time: 'morning',
+      email: 'invalid-email',
+      password: 'validPassword123',
     };
 
-    validateCreateTask(
+    validateResgister(
       mockRequest as Request,
       mockResponse as Response,
       mockNext as NextFunction,
@@ -52,31 +50,13 @@ describe('validateCreateTask (unit)', () => {
     expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('deve retornar 400 se o status da tarefa for inválido', () => {
+  it('deve retornar 400 se a senha não tiver no mínimo 6 caracteres', () => {
     mockRequest.body = {
-      title: 'Task title',
-      description: 'Task description',
-      time: 'morning',
+      email: 'email@exemplo.com',
+      password: '123',
     };
 
-    validateCreateTask(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext as NextFunction,
-    );
-
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockNext).not.toHaveBeenCalled();
-  });
-
-  it('deve retornar 400 se o tempo da tarefa não for fornecido', () => {
-    mockRequest.body = {
-      title: 'Task title',
-      description: 'Task description',
-      status: 'not_started',
-    };
-
-    validateCreateTask(
+    validateResgister(
       mockRequest as Request,
       mockResponse as Response,
       mockNext as NextFunction,
