@@ -1,6 +1,6 @@
 import { generateAccessToken, generateRefreshToken, hashToken } from './tokens';
 
-describe('tokens', () => {
+describe('tokens (unit)', () => {
   describe('generateAccessToken', () => {
     it('deve receber um userId e retornar um accessToken válido', () => {
       const userId = '12345';
