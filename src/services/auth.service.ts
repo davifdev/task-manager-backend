@@ -32,7 +32,7 @@ const registerService = async (body: RegisterSchemaType) => {
     tokenHash: hashToken(refreshToken),
     userId: user.id,
     familyId,
-    expiresAt: new Date(Date.now()),
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   });
 
   return {
