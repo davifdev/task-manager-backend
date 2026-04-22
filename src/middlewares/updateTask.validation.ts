@@ -11,7 +11,5 @@ export const validateUpdateTask = (
     return res.status(400).send({ errors: validationObj.error.issues });
   }
 
-  res.status(200).send({ message: 'Validation successful' });
-
   next();
 };
