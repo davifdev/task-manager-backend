@@ -68,7 +68,7 @@ const loginService = async (body: LoginSchemaType) => {
     tokenHash: hashToken(refreshToken),
     userId: user.id,
     familyId,
-    expiresAt: new Date(Date.now()),
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   });
 
   return {
@@ -142,7 +142,7 @@ const refreshTokenService = async (body: RefreshTokenSchemaType) => {
 };
 
 const logoutService = async (body: LogoutSchemaType) => {
-  const token = body.refreshToken;
+  const token = body.token;
 
   if (token) {
     await userRepository.logout(token);

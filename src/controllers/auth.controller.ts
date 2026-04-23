@@ -100,7 +100,7 @@ const refreshTokenController = async (req: Request, res: Response) => {
 const logoutController = async (req: Request, res: Response) => {
   try {
     const logoutResult = await logoutService({
-      refreshToken: req.cookies.refreshToken,
+      token: req.cookies.refreshToken,
     });
 
     if (logoutResult.status === '204') {
