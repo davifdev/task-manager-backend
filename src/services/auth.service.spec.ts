@@ -35,7 +35,7 @@ describe('AuthService (unit)', () => {
     it('deve registrar um novo usuário e retornar os tokens', async () => {
       const newUser = {
         username: 'John Doe',
-        email: 'jhondoe@example.com',
+        email: 'johndoe@example.com',
         password: 'password123',
       };
 

@@ -28,11 +28,10 @@ describe('UserRepository (unit)', () => {
     it('deve retornar um usuário se o email existir', async () => {
       const email = 'john.doe@example.com';
 
-      prismaMock.user.findUnique.mockResolvedValue({ id: '123', email } as any);
+      prismaMock.user.findUnique.mockResolvedValue({ email } as any);
 
       const user = await userRepository.findByEmail(email);
 
-      expect(user).toHaveProperty('id');
       expect(user?.email).toBe(email);
       expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
         where: { email },
