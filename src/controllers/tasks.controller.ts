@@ -46,6 +46,7 @@ const createTaskController = async (req: Request, res: Response) => {
 
 const deleteTaskController = async (req: Request, res: Response) => {
   const taskId = req.params.id as string;
+  if (!taskId) return;
 
   try {
     await deleteTaskService(taskId);
@@ -63,6 +64,7 @@ const deleteTaskController = async (req: Request, res: Response) => {
 const deleteAllTasksController = async (req: Request, res: Response) => {
   const userId = req.userId;
   if (!userId) return;
+
   try {
     await deleteAllTasksService(userId);
     res.status(200).json({ message: 'All tasks deleted successfully' });
@@ -98,7 +100,7 @@ const updateTaskController = async (req: Request, res: Response) => {
 const updateTaskStatusController = async (req: Request, res: Response) => {
   const taskId = req.params.id as string;
   const { status } = req.body;
-
+  if (!taskId || !status) return;
   try {
     await updateTaskStatusService(taskId, status);
     res.status(200).json({ message: 'Task status updated successfully' });
