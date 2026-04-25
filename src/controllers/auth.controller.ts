@@ -65,7 +65,7 @@ const refreshTokenController = async (req: Request, res: Response) => {
     });
     if (!refreshToken) {
       return res.status(401).json({
-        status: 'Unauthorized',
+        message: 'Unauthorized',
       });
     }
     if (refreshToken.errors.error && refreshToken?.errors.status === '401') {
@@ -102,6 +102,12 @@ const logoutController = async (req: Request, res: Response) => {
     const logoutResult = await logoutService({
       token: req.cookies.refreshToken,
     });
+
+    if (!logoutResult) {
+      return res.status(403).json({
+        message: 'Forbidden',
+      });
+    }
 
     if (logoutResult.status === '204') {
       res.clearCookie('refreshToken');
