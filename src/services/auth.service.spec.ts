@@ -82,6 +82,7 @@ describe('AuthService (unit)', () => {
       );
 
       expect(result).toEqual({
+        username: newUser.username,
         email: newUser.email,
         tokens: {
           accessToken: 'access_token',

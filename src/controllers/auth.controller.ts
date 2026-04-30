@@ -19,6 +19,7 @@ const registerController = async (req: Request, res: Response) => {
     });
 
     res.status(201).json({
+      username: registerResult.username,
       email: registerResult.email,
       accessToken,
     });
@@ -48,6 +49,7 @@ const loginController = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({
+      username: loginResult.username,
       email: loginResult.email,
       accessToken,
     });

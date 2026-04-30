@@ -10,7 +10,8 @@
   "scripts": {
     "prepare": "husky",
     "commitlint": "commitlint --edit",
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index.ts",
+    "test": "npx vitest run --watch"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",

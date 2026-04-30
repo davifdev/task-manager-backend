@@ -137,7 +137,3 @@ npm test
 ```
 
 ---
-
-## 📄 Licença
-
-ISC - Davi Fernandes

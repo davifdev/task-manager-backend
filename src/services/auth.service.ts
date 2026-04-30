@@ -37,6 +37,7 @@ const registerService = async (body: RegisterSchemaType) => {
 
   return {
     email,
+    username,
     tokens: {
       accessToken,
       refreshToken,
@@ -73,6 +74,7 @@ const loginService = async (body: LoginSchemaType) => {
 
   return {
     email,
+    username: user.username,
     tokens: {
       accessToken,
       refreshToken,
