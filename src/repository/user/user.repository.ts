@@ -39,6 +39,14 @@ class UserRepository implements IUserRepository {
     });
   }
 
+  async getUser(userId: string) {
+    return this.db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+  }
+
   async refreshToken(data: RefreshTokenDTO): Promise<RefreshToken> {
     return this.db.refreshToken.create({
       data,

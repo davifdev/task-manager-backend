@@ -16,7 +16,7 @@ import type { LogoutSchemaType } from '../schemas/logout.schema';
 const registerService = async (body: RegisterSchemaType) => {
   const { username, email, password } = body;
   const hashedPassword = bcrypt.hashSync(password, 10);
-
+  console.log(username, email, password);
   const user = await userRepository.create({
     username,
     email,
@@ -113,7 +113,7 @@ const refreshTokenService = async (body: RefreshTokenSchemaType) => {
   }
 
   const payload = jwt.verify(oldToken, process.env.SECRET_REFRESH_KEY!) as {
-    id: string;
+    userId: string;
   };
 
   if (!payload) {
@@ -124,14 +124,14 @@ const refreshTokenService = async (body: RefreshTokenSchemaType) => {
 
   await userRepository.updateRefreshToken(storedToken);
 
-  const accessToken = generateAccessToken(payload.id);
-  const refreshToken = generateRefreshToken(payload.id);
+  const accessToken = generateAccessToken(payload.userId);
+  const refreshToken = generateRefreshToken(payload.userId);
 
   await userRepository.refreshToken({
     tokenHash: hashToken(refreshToken),
-    userId: payload.id,
+    userId: payload.userId,
     familyId: storedToken.id,
-    expiresAt: new Date(Date.now()),
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   });
 
   return {
@@ -156,4 +156,20 @@ const logoutService = async (body: LogoutSchemaType) => {
   };
 };
 
-export { registerService, loginService, refreshTokenService, logoutService };
+const getUserService = async (userId: string) => {
+  const user = await userRepository.getUser(userId);
+
+  return {
+    id: user?.id,
+    username: user?.username,
+    email: user?.email,
+  };
+};
+
+export {
+  registerService,
+  loginService,
+  refreshTokenService,
+  logoutService,
+  getUserService,
+};

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { validateResgister } from '../middlewares/register.validation';
 import {
+  getUserController,
   loginController,
   logoutController,
   refreshTokenController,
@@ -27,6 +28,7 @@ router.post('/register', validateResgister, registerController);
 router.post('/login', validateLogin, loginController);
 router.post('/refresh-token', refreshTokenController);
 router.post('/logout', logoutController);
+router.get('/get-user', authMiddleware, getUserController);
 
 // Task routes
 router.get('/tasks', authMiddleware, getAllTasksController);
