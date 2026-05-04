@@ -40,6 +40,14 @@ export class TasksRepository {
     };
   }
 
+  async listAllTasks(userId: string) {
+    return await this.db.task.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
   async updateTask(id: string, data: TaskDTO) {
     await this.db.task.update({
       where: {

@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken';
 import { userRepository } from '../repository/user/user.repository';
 import {
+  getUserService,
   loginService,
   logoutService,
   refreshTokenService,
@@ -18,6 +19,7 @@ vi.mock('../repository/user/user.repository', () => ({
     getRefreshToken: vi.fn(),
     updateManyRefreshToken: vi.fn(),
     updateRefreshToken: vi.fn(),
+    getUser: vi.fn(),
   },
 }));
 
@@ -178,7 +180,7 @@ describe('AuthService (unit)', () => {
     it('deve processar a rota de sucesso e retornar novos tokens', async () => {
       const mockToken = 'valid-token';
       const mockStoredToken = { id: 'family-1', revoked: false };
-      const mockPayload = { id: 'user-123' };
+      const mockPayload = { userId: 'user-123' };
 
       vi.mocked(userRepository.getRefreshToken).mockResolvedValue(
         mockStoredToken as any,
@@ -194,8 +196,9 @@ describe('AuthService (unit)', () => {
 
       expect(userRepository.refreshToken).toHaveBeenCalledWith(
         expect.objectContaining({
-          userId: 'user-123',
-          familyId: 'family-1',
+          familyId: mockStoredToken.id,
+          userId: mockPayload.userId,
+          expiresAt: expect.any(Date),
         }),
       );
     });
@@ -214,6 +217,29 @@ describe('AuthService (unit)', () => {
         mockStoredToken,
       );
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getUserService', () => {
+    it('deve retornar um usuário referente ao id especificado', async () => {
+      const userId = 'userId-123';
+      vi.mocked(userRepository.getUser).mockResolvedValue({
+        id: userId,
+        username: 'any-username',
+        email: 'any-email',
+        password: 'any-password',
+      });
+
+      const result = await getUserService(userId);
+
+      console.log(result);
+
+      expect(result.id).toBe(userId);
+      expect(result).toStrictEqual({
+        email: 'any-email',
+        id: userId,
+        username: 'any-username',
+      });
     });
   });
 });

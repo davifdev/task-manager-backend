@@ -67,4 +67,23 @@ describe('TasksRepository (unit)', () => {
       });
     });
   });
+  describe('listAllTasks', async () => {
+    it('deve listar todas as tarefas', async () => {
+      const userId = 'user123';
+      const mockTasks = [
+        { id: '1', title: 'Task 1', time: 'morning', userId },
+        { id: '2', title: 'Task 2', time: 'afternoon', userId },
+        { id: '3', title: 'Task 3', time: 'evening', userId },
+        { id: '4', title: 'Task 4', time: 'evening', userId },
+      ];
+
+      prismaMock.task.findMany.mockResolvedValue(mockTasks as any);
+
+      await taskRepository.listAllTasks(userId);
+
+      expect(prismaMock.task.findMany).toHaveBeenCalledWith({
+        where: { userId },
+      });
+    });
+  });
 });

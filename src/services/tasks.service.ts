@@ -7,6 +7,11 @@ const getAllTasksServices = async (userId: string) => {
   return tasks;
 };
 
+const listAllTasksServices = async (userId: string) => {
+  const tasks = await taskRepository.listAllTasks(userId);
+  return tasks;
+};
+
 const createTaskService = async (data: CreateSchemaType, userId: string) => {
   await taskRepository.createTask({ ...data, userId });
 };
@@ -41,4 +46,5 @@ export {
   deleteAllTasksService,
   updateTaskService,
   updateTaskStatusService,
+  listAllTasksServices,
 };

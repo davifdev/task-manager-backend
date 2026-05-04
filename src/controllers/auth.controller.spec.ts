@@ -1,11 +1,13 @@
 import type { Request, Response } from 'express';
 import {
+  getUserService,
   loginService,
   logoutService,
   refreshTokenService,
   registerService,
 } from '../services/auth.service';
 import {
+  getUserController,
   loginController,
   logoutController,
   refreshTokenController,
@@ -17,6 +19,7 @@ vi.mock('../services/auth.service', () => ({
   loginService: vi.fn(),
   refreshTokenService: vi.fn(),
   logoutService: vi.fn(),
+  getUserService: vi.fn(),
 }));
 
 vi.mock('../helpers/tokens', () => ({
@@ -53,6 +56,7 @@ describe('authController (unit)', () => {
   describe('registerContoller', () => {
     it('deve registrar um novo usuário e retornar 201 e accessToken', async () => {
       vi.mocked(registerService).mockResolvedValue({
+        username: makeUser.username,
         email: makeUser.email,
         tokens: {
           accessToken: 'access_token',
@@ -68,8 +72,12 @@ describe('authController (unit)', () => {
 
       expect(registerService).toHaveBeenCalledWith(mockRequest.body);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        accessToken: 'access_token',
-        email: 'any-email',
+        username: makeUser.username,
+        email: makeUser.email,
+        tokens: {
+          accessToken: 'access_token',
+          refreshToken: 'refresh_token',
+        },
       });
     });
     it('deve retornar 400 se algum erro acontecer', async () => {
@@ -100,6 +108,7 @@ describe('authController (unit)', () => {
     it('deve retornar email e accessToken se o usuário logou com sucesso', async () => {
       mockRequest.body = { makeUser };
       vi.mocked(loginService).mockResolvedValue({
+        username: makeUser.username,
         email: makeUser.email,
         tokens: {
           accessToken: 'access_token',
@@ -111,8 +120,12 @@ describe('authController (unit)', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        accessToken: 'access_token',
-        email: 'any-email',
+        username: makeUser.username,
+        email: makeUser.email,
+        tokens: {
+          accessToken: 'access_token',
+          refreshToken: 'refresh_token',
+        },
       });
     });
     it('deve retornar 400 se ocorrer algum erro', async () => {
@@ -187,7 +200,7 @@ describe('authController (unit)', () => {
       });
     });
     it('deve criar um novo refreshToken e retornar o accessToken', async () => {
-      mockRequest.cookies = { refreshToken: 'valid-refresh-token' };
+      mockRequest.body = { refreshToken: 'valid-refresh-token' };
       vi.mocked(refreshTokenService).mockResolvedValue({
         errors: {
           error: false,
@@ -206,7 +219,10 @@ describe('authController (unit)', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        accessToken: 'access_token',
+        tokens: {
+          accessToken: 'access_token',
+          refreshToken: 'refresh_token',
+        },
       });
     });
     it('deve retornar 500 se ocorreu algum erro', async () => {
@@ -246,6 +262,39 @@ describe('authController (unit)', () => {
       expect(mockResponse.status).toHaveBeenCalledWith(204);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Logged out successfully',
+      });
+    });
+  });
+  describe('getUserController', () => {
+    it('deve retornar undefined se o userId não for fornecido', async () => {
+      mockRequest.userId = '';
+
+      const result = await getUserController(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(result).toBeUndefined();
+    });
+    it('deve retornar 200 se os dados do usuário forem retornado', async () => {
+      mockRequest.userId = 'user-123';
+
+      await getUserController(mockRequest as Request, mockResponse as Response);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+    });
+    it('deve retornar 500 se ocorrer algum erro', async () => {
+      mockRequest.userId = 'user-123';
+
+      vi.mocked(getUserService).mockImplementation(() => {
+        throw new Error('Error');
+      });
+
+      await getUserController(mockRequest as Request, mockResponse as Response);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Error',
       });
     });
   });

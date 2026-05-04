@@ -3,6 +3,7 @@ import {
   deleteAllTasksService,
   deleteTaskService,
   getAllTasksServices,
+  listAllTasksServices,
   updateTaskService,
   updateTaskStatusService,
 } from '../services/tasks.service';
@@ -21,6 +22,23 @@ const getAllTasksController = async (req: Request, res: Response) => {
         error instanceof Error
           ? error.message
           : 'An error occurred while fetching tasks.',
+    });
+  }
+};
+
+const listAllTasksController = async (req: Request, res: Response) => {
+  const userId = req.userId;
+  if (!userId) return;
+
+  try {
+    const tasks = await listAllTasksServices(userId);
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while fetching all tasks.',
     });
   }
 };
@@ -121,4 +139,5 @@ export {
   deleteAllTasksController,
   updateTaskController,
   updateTaskStatusController,
+  listAllTasksController,
 };

@@ -56,4 +56,21 @@ describe('UserRepository (unit)', () => {
       });
     });
   });
+  describe('getUser', () => {
+    it('deve retornar um usuário referente ao userId', async () => {
+      const userId = 'user-123';
+      const userReturn = {
+        username: 'any-username',
+        email: 'any-email',
+        password: 'any-password',
+      };
+      prismaMock.user.findUnique.mockResolvedValue({ userReturn } as any);
+
+      const user = await userRepository.getUser(userId);
+
+      expect(user).toStrictEqual({
+        userReturn,
+      });
+    });
+  });
 });

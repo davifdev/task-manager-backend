@@ -4,6 +4,7 @@ import {
   deleteAllTasksController,
   deleteTaskController,
   getAllTasksController,
+  listAllTasksController,
   updateTaskController,
   updateTaskStatusController,
 } from './tasks.controller';
@@ -12,6 +13,7 @@ import {
   deleteAllTasksService,
   deleteTaskService,
   getAllTasksServices,
+  listAllTasksServices,
   updateTaskService,
   updateTaskStatusService,
 } from '../services/tasks.service';
@@ -24,6 +26,7 @@ vi.mock('../services/tasks.service', () => {
     deleteAllTasksService: vi.fn(),
     updateTaskService: vi.fn(),
     updateTaskStatusService: vi.fn(),
+    listAllTasksServices: vi.fn(),
   };
 });
 
@@ -292,6 +295,41 @@ describe('taskController (unit)', () => {
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'Error',
       });
+    });
+  });
+  describe('listAllTaskController', () => {
+    it('deve retornar undefined se o userId não for fornecido', async () => {
+      mockRequest.userId = '';
+
+      const result = await listAllTasksController(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(result).toBeUndefined();
+    });
+    it('deve retornar 200 se o userId for fornecido', async () => {
+      mockRequest.userId = 'user-123';
+      await listAllTasksController(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+    });
+    it('deve retornar 500 se ocorrer algum erro', async () => {
+      mockRequest.userId = 'user-123';
+
+      vi.mocked(listAllTasksServices).mockImplementation(() => {
+        throw new Error('Error');
+      });
+
+      await listAllTasksController(
+        mockRequest as Request,
+        mockResponse as Response,
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
     });
   });
 });
