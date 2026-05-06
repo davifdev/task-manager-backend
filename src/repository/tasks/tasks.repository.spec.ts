@@ -22,20 +22,20 @@ describe('TasksRepository (unit)', () => {
   });
   describe('listTasks', async () => {
     it('deve filtrar e agrupar as tarefas por período corretamente', async () => {
-      const id = 'user123';
+      const userId = 'user123';
       const mockTasks = [
-        { idTask: '1', title: 'Task 1', time: 'morning', id },
-        { idTask: '2', title: 'Task 2', time: 'afternoon', id },
-        { idTask: '3', title: 'Task 3', time: 'evening', id },
-        { idTask: '4', title: 'Task 4', time: 'evening', id },
+        { id: '1', title: 'Task 1', time: 'morning', userId },
+        { id: '2', title: 'Task 2', time: 'afternoon', userId },
+        { id: '3', title: 'Task 3', time: 'evening', userId },
+        { id: '4', title: 'Task 4', time: 'evening', userId },
       ];
 
       prismaMock.task.findMany.mockResolvedValue(mockTasks as any);
 
-      const result = await taskRepository.listTasks(id);
+      const result = await taskRepository.listTasks(userId);
 
       expect(prismaMock.task.findMany).toHaveBeenCalledWith({
-        where: { id },
+        where: { userId },
       });
 
       expect(result.morning).toHaveLength(1);
@@ -69,19 +69,39 @@ describe('TasksRepository (unit)', () => {
   });
   describe('listAllTasks', async () => {
     it('deve listar todas as tarefas', async () => {
-      const id = 'user123';
+      const userId = 'user123';
       const mockTasks = [
-        { idTask: '1', title: 'Task 1', time: 'morning', id },
-        { idTask: '2', title: 'Task 2', time: 'afternoon', id },
-        { idTask: '3', title: 'Task 3', time: 'evening', id },
-        { idTask: '4', title: 'Task 4', time: 'evening', id },
+        { id: '1', title: 'Task 1', time: 'morning', userId },
+        { id: '2', title: 'Task 2', time: 'afternoon', userId },
+        { id: '3', title: 'Task 3', time: 'evening', userId },
+        { id: '4', title: 'Task 4', time: 'evening', userId },
       ];
 
       prismaMock.task.findMany.mockResolvedValue(mockTasks as any);
 
-      await taskRepository.listAllTasks(id);
+      await taskRepository.listAllTasks(userId);
 
       expect(prismaMock.task.findMany).toHaveBeenCalledWith({
+        where: { userId },
+      });
+    });
+  });
+  describe('listUniqueTask', () => {
+    it('deve listar uma tarefa unica', async () => {
+      const id = 'task-123';
+      const mockTask = {
+        title: 'test task',
+        description: 'test description',
+        userId: 'user123',
+        status: 'pending',
+        time: 'morning',
+      };
+
+      prismaMock.task.findUnique.mockResolvedValue(mockTask as any);
+
+      await taskRepository.listUniqueTask(id);
+
+      expect(prismaMock.task.findUnique).toHaveBeenCalledWith({
         where: { id },
       });
     });

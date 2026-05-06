@@ -6,6 +6,7 @@ import {
   deleteTaskService,
   getAllTasksServices,
   listAllTasksServices,
+  listUniqueTaskServices,
   updateTaskService,
   updateTaskStatusService,
 } from './tasks.service';
@@ -19,6 +20,7 @@ vi.mock('../repository/tasks/tasks.repository', () => ({
     deleteTask: vi.fn(),
     deleteAllTasks: vi.fn(),
     listAllTasks: vi.fn(),
+    listUniqueTask: vi.fn(),
   },
 }));
 
@@ -99,6 +101,15 @@ describe('tasksServices (unit)', () => {
       await listAllTasksServices(userId);
 
       expect(taskRepository.listAllTasks).toHaveBeenCalledWith(userId);
+    });
+  });
+
+  describe('listUniqueTaskServices', () => {
+    it('deve chamar listUniqueTasksServices com os valores corretos', async () => {
+      const taskId = 'task-123';
+      await listUniqueTaskServices(taskId);
+
+      expect(taskRepository.listUniqueTask).toHaveBeenCalledWith(taskId);
     });
   });
 });

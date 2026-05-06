@@ -22,10 +22,10 @@ export class TasksRepository {
     });
   }
 
-  async listTasks(id: string) {
+  async listTasks(userId: string) {
     const tasks = await this.db.task.findMany({
       where: {
-        id,
+        userId,
       },
     });
 
@@ -40,10 +40,10 @@ export class TasksRepository {
     };
   }
 
-  async listAllTasks(id: string) {
+  async listAllTasks(userId: string) {
     return await this.db.task.findMany({
       where: {
-        id,
+        userId,
       },
     });
   }
