@@ -12,6 +12,11 @@ const listAllTasksServices = async (userId: string) => {
   return tasks;
 };
 
+const listUniqueTaskServices = async (taskId: string) => {
+  const task = await taskRepository.listUniqueTask(taskId);
+  return task;
+};
+
 const createTaskService = async (data: CreateSchemaType, userId: string) => {
   await taskRepository.createTask({ ...data, userId });
 };
@@ -32,10 +37,8 @@ const updateTaskService = async (
   await taskRepository.updateTask(taskId, { ...data, userId });
 };
 
-const updateTaskStatusService = async (
-  taskId: string,
-  status: 'pending' | 'in_progress' | 'completed',
-) => {
+const updateTaskStatusService = async (taskId: string, status: string) => {
+  console.log(taskId, status);
   await taskRepository.updateTaskStatus(taskId, status);
 };
 
@@ -47,4 +50,5 @@ export {
   updateTaskService,
   updateTaskStatusService,
   listAllTasksServices,
+  listUniqueTaskServices,
 };

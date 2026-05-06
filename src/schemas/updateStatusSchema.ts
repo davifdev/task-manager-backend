@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const updateStatusSchema = z.object({
-  status: z.enum(['pending', 'in_progress', 'completed']),
+  status: z.string(),
 });
 
 export type UpdateStatusSchemaType = z.infer<typeof updateStatusSchema>;

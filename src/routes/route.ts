@@ -15,6 +15,7 @@ import {
   deleteTaskController,
   getAllTasksController,
   listAllTasksController,
+  listUniqueTaskController,
   updateTaskController,
   updateTaskStatusController,
 } from '../controllers/tasks.controller';
@@ -34,6 +35,7 @@ router.get('/get-user', authMiddleware, getUserController);
 // Task routes
 router.get('/all-tasks', authMiddleware, listAllTasksController);
 router.get('/tasks', authMiddleware, getAllTasksController);
+router.get('/tasks/:id', authMiddleware, listUniqueTaskController);
 router.post('/tasks', authMiddleware, validateCreateTask, createTaskController);
 router.put(
   '/tasks/:id',

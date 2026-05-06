@@ -4,6 +4,7 @@ import {
   deleteTaskService,
   getAllTasksServices,
   listAllTasksServices,
+  listUniqueTaskServices,
   updateTaskService,
   updateTaskStatusService,
 } from '../services/tasks.service';
@@ -43,6 +44,23 @@ const listAllTasksController = async (req: Request, res: Response) => {
   }
 };
 
+const listUniqueTaskController = async (req: Request, res: Response) => {
+  const taskId = req.params.id as string;
+  if (!taskId) return;
+
+  try {
+    const task = await listUniqueTaskServices(taskId);
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while fetching unique task.',
+    });
+  }
+};
+
 const createTaskController = async (req: Request, res: Response) => {
   const userId = req.userId;
   if (!userId) return;
@@ -65,7 +83,7 @@ const createTaskController = async (req: Request, res: Response) => {
 const deleteTaskController = async (req: Request, res: Response) => {
   const taskId = req.params.id as string;
   if (!taskId) return;
-
+  console.log(taskId);
   try {
     await deleteTaskService(taskId);
     res.status(200).json({ message: 'Task deleted successfully' });
@@ -140,4 +158,5 @@ export {
   updateTaskController,
   updateTaskStatusController,
   listAllTasksController,
+  listUniqueTaskController,
 };

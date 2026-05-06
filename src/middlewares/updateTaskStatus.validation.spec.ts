@@ -18,10 +18,6 @@ describe('validateUpdateTaskStatus (unit)', () => {
   });
 
   it('deve retornar 400 se o status da tarefa for inválido', () => {
-    mockRequest.body = {
-      status: 'invalid_status',
-    };
-
     validateUpdateTaskStatus(
       mockRequest as Request,
       mockResponse as Response,

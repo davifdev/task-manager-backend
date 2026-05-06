@@ -22,10 +22,10 @@ export class TasksRepository {
     });
   }
 
-  async listTasks(userId: string) {
+  async listTasks(id: string) {
     const tasks = await this.db.task.findMany({
       where: {
-        userId,
+        id,
       },
     });
 
@@ -40,10 +40,18 @@ export class TasksRepository {
     };
   }
 
-  async listAllTasks(userId: string) {
+  async listAllTasks(id: string) {
     return await this.db.task.findMany({
       where: {
-        userId,
+        id,
+      },
+    });
+  }
+
+  async listUniqueTask(id: string) {
+    return await this.db.task.findUnique({
+      where: {
+        id,
       },
     });
   }
@@ -57,10 +65,7 @@ export class TasksRepository {
     });
   }
 
-  async updateTaskStatus(
-    id: string,
-    status: 'pending' | 'in_progress' | 'completed',
-  ) {
+  async updateTaskStatus(id: string, status: string) {
     await this.db.task.update({
       where: {
         id,
@@ -79,10 +84,10 @@ export class TasksRepository {
     });
   }
 
-  async deleteAllTasks(userId: string) {
+  async deleteAllTasks(id: string) {
     await this.db.task.deleteMany({
       where: {
-        userId,
+        id,
       },
     });
   }

@@ -8,7 +8,6 @@ import {
 } from '../services/auth.service';
 
 const registerController = async (req: Request, res: Response) => {
-  console.log(req.body);
   try {
     const registerResult = await registerService(req.body);
 
