@@ -38,7 +38,6 @@ const updateTaskService = async (
 };
 
 const updateTaskStatusService = async (taskId: string, status: string) => {
-  console.log(taskId, status);
   await taskRepository.updateTaskStatus(taskId, status);
 };
 

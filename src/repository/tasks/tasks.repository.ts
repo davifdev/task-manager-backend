@@ -84,10 +84,10 @@ export class TasksRepository {
     });
   }
 
-  async deleteAllTasks(id: string) {
+  async deleteAllTasks(userId: string) {
     await this.db.task.deleteMany({
       where: {
-        id,
+        userId,
       },
     });
   }
