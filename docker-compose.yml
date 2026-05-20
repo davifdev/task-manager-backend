@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: task-manager-db
+    environment:
+      POSTGRES_USER: ${proccess.env.POSTGRES_USER}
+      POSTGRES_PASSWORD: ${proccess.env.POSTGRES_PASSWORD}
+      POSTGRES_DB: ${proccess.env.POSTGRES_DB}
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
