@@ -1,12 +1,5 @@
 import { PostgresClient } from "../../db/postgres/client";
-
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: "is_pending" | "is_progress" | "is_completed";
-  time: "morning" | "afternoon" | "evening";
-}
+import type { Task } from "../../use-cases/tasks/create-task";
 export class CreateTaskRepository {
   async execute(createTaskParams: Task) {
     const result = await PostgresClient.query(
