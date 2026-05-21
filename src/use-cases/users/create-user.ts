@@ -1,6 +1,9 @@
 import crypto from "crypto";
 import { CreateUserRepository } from "../../repositories/user/create-user";
-import type { BodyParamsCreateUser } from "../../models/users/create-user";
+import type {
+  BodyParamsCreateUser,
+  UserType,
+} from "../../models/users/create-user";
 export class CreateUserUseCase {
   private readonly createUserRepository;
 
@@ -13,10 +16,10 @@ export class CreateUserUseCase {
 
     const params = {
       ...createUserParams,
-      userId: user_id,
+      id: user_id,
     };
 
-    const result = await this.createUserRepository.execute(params);
+    const result: UserType = await this.createUserRepository.execute(params);
 
     return result;
   }
