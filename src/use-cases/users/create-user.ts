@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import { CreateUserRepository } from "../../repositories/user/create-user";
 import type { BodyParamsCreateUser } from "../../models/users/create-user";
-
 export class CreateUserUseCase {
   private readonly createUserRepository;
 
