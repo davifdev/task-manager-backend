@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import type { BodyParams, TaskType } from "../../models/tasks/create-task";
 import type { CreateTaskRepository } from "../../repositories/tasks/create-task";
 export class CreateTaskUseCase {
@@ -8,7 +9,7 @@ export class CreateTaskUseCase {
   }
 
   async execute(createTaskParams: BodyParams) {
-    const id = crypto.randomUUID();
+    const id = uuidv4();
 
     const result: TaskType = await this.createTaskRepository.execute({
       ...createTaskParams,

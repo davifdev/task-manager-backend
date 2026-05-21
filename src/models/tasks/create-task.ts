@@ -3,6 +3,7 @@ export type BodyParams = {
   time: string;
   description: string;
   status: string;
+  user_id: string;
 };
 
 export type TaskType = {

@@ -10,6 +10,7 @@ export class CreateTaskController {
   }
 
   async execute(httpRequest: Request) {
+    console.log(httpRequest.body);
     try {
       const params: BodyParams = httpRequest.body;
 
