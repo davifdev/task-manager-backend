@@ -1,6 +1,6 @@
 import { PostgresClient } from "../../db/postgres/client";
 
-type TaskType = {
+export type TaskType = {
   id: string;
   title: string;
   status: string;
