@@ -1,15 +1,22 @@
 import { PostgresClient } from "../../db/postgres/client";
-import type { Task } from "../../use-cases/tasks/create-task";
+
+type TaskType = {
+  id: string;
+  title: string;
+  status: string;
+  time: string;
+  description: string;
+};
 export class CreateTaskRepository {
-  async execute(createTaskParams: Task) {
+  async execute(createTaskParams: TaskType) {
     const result = await PostgresClient.query(
-      "INSERT INTO users (id, title, description, status, time) VALUES ($1, $2, $3, $4, $5)",
+      "INSERT INTO tasks (id, title, status, time, description) VALUES ($1, $2, $3, $4, $5)",
       [
         createTaskParams.id,
         createTaskParams.title,
-        createTaskParams.description,
         createTaskParams.status,
         createTaskParams.time,
+        createTaskParams.description,
       ],
     );
 
