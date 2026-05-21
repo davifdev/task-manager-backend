@@ -11,4 +11,5 @@ export type TaskType = {
   status: string;
   time: string;
   description: string;
+  user_id: string;
 };

@@ -12,3 +12,7 @@ app.post("/tasks", async (request, response) => {
 
   response.status(statusCode).json(body);
 });
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server running at http://localhost:${process.env.PORT}`);
+});
