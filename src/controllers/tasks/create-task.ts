@@ -51,7 +51,7 @@ export class CreateTaskController {
       console.error(error);
       return {
         statusCode: 500,
-        body: "Internal Server Error",
+        body: { message: "Internal Server Error" },
       };
     }
   }
