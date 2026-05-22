@@ -2,6 +2,7 @@ import { type Request } from "express";
 import type { CreateUserUseCase } from "../../use-cases/users/create-user";
 import type { BodyParamsCreateUser } from "../../models/users/create-user";
 import validator from "validator";
+import bcrypt from "bcrypt";
 
 type RequiredFields = keyof BodyParamsCreateUser;
 export class CreateUserController {
@@ -62,8 +63,15 @@ export class CreateUserController {
       };
     }
 
+    const hashedPassword = await bcrypt.hash(params.password, 10);
+
+    const createdUser = {
+      ...params,
+      password: hashedPassword,
+    };
+
     try {
-      const result = await this.createUserUseCase.execute(params);
+      const result = await this.createUserUseCase.execute(createdUser);
 
       return {
         statusCode: 200,
