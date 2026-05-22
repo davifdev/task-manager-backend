@@ -20,10 +20,10 @@ CREATE TYPE task_time AS ENUM (
 
 CREATE TABLE tasks (
   id UUID PRIMARY KEY NOT NULL,
-  title VARCHAR(255) NOT NULL,
+  title VARCHAR(255),
   description TEXT,
-  status task_status NOT NULL,
-  time task_time NOT NULL,
+  status task_status,
+  time task_time,
 
   user_id UUID NOT NULL,
 
