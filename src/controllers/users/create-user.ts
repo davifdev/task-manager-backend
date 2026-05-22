@@ -1,8 +1,12 @@
 import { type Request } from "express";
 import type { CreateUserUseCase } from "../../use-cases/users/create-user";
-import type { BodyParamsCreateUser } from "../../models/users/create-user";
+import type {
+  BodyParamsCreateUser,
+  UserType,
+} from "../../models/users/create-user";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { badRequest, ok, serverError } from "../../helpers/http";
 
 type RequiredFields = keyof BodyParamsCreateUser;
 export class CreateUserController {
@@ -24,43 +28,34 @@ export class CreateUserController {
 
     for (const field of requiredFields) {
       if (!params[field]) {
-        return {
-          statusCode: 400,
-          body: { message: `field ${field} is missing.` },
-        };
+        return badRequest({ message: `field ${field} is missing.` });
       }
     }
 
     const firstNameIsValid = params.first_name.length > 3;
     if (!firstNameIsValid) {
-      return {
-        statusCode: 400,
-        body: { message: "first name must have more than 3 characters." },
-      };
+      return badRequest({
+        message: "first_name must have more than 3 characters.",
+      });
     }
 
     const lastNameIsValid = params.last_name.length > 3;
     if (!lastNameIsValid) {
-      return {
-        statusCode: 400,
-        body: { message: "last name must have more than 3 characters." },
-      };
+      return badRequest({
+        message: "last_name must have more than 3 characters.",
+      });
     }
 
     const emailIsValid = validator.isEmail(params.email);
     if (!emailIsValid) {
-      return {
-        statusCode: 400,
-        body: { message: "email is invalid" },
-      };
+      return badRequest({ message: "email is invalid" });
     }
 
     const passwordIsValid = params.password.length >= 6;
     if (!passwordIsValid) {
-      return {
-        statusCode: 400,
-        body: { message: "password must have at least 6 characters." },
-      };
+      return badRequest({
+        message: "password must have at least 6 characters.",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(params.password, 10);
@@ -73,16 +68,12 @@ export class CreateUserController {
     try {
       const result = await this.createUserUseCase.execute(createdUser);
 
-      return {
-        statusCode: 200,
-        body: result,
-      };
+      return ok<UserType>(result);
     } catch (error) {
       console.error(error);
-      return {
-        statusCode: 500,
-        body: "Internal Server Error",
-      };
+      return serverError({
+        message: "Internal Server Error",
+      });
     }
   }
 }
