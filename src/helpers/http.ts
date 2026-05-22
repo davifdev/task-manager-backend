@@ -1,4 +1,4 @@
-import type { BadRequest, ServerError } from "../models/http/http.model";
+import type { BadRequest } from "../models/http/http.model";
 
 export const badRequest = (body: BadRequest) => {
   return {
@@ -7,10 +7,10 @@ export const badRequest = (body: BadRequest) => {
   };
 };
 
-export const serverError = (body: ServerError) => {
+export const serverError = () => {
   return {
     statusCode: 500,
-    body,
+    body: { message: "Internal Server Error" },
   };
 };
 

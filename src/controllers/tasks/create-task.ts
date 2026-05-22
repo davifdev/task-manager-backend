@@ -2,7 +2,7 @@ import { type Request } from "express";
 import type { CreateTaskUseCase } from "../../use-cases/tasks/create-task";
 import type { BodyParams } from "../../models/tasks/create-task";
 import validator from "validator";
-import { badRequest } from "../../helpers/http";
+import { badRequest, create, serverError } from "../../helpers/http";
 
 type RequiredFields = keyof BodyParams;
 export class CreateTaskController {
@@ -38,16 +38,10 @@ export class CreateTaskController {
 
       const result = await this.createTaskUseCase.execute(params);
 
-      return {
-        statusCode: 201,
-        body: result,
-      };
+      return create(result);
     } catch (error) {
       console.error(error);
-      return {
-        statusCode: 500,
-        body: { message: "Internal Server Error" },
-      };
+      return serverError();
     }
   }
 }

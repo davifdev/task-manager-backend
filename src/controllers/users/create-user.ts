@@ -1,9 +1,6 @@
 import { type Request } from "express";
 import type { CreateUserUseCase } from "../../use-cases/users/create-user";
-import type {
-  BodyParamsCreateUser,
-  UserType,
-} from "../../models/users/create-user";
+import type { BodyParamsCreateUser } from "../../models/users/create-user";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { badRequest, create, serverError } from "../../helpers/http";
@@ -68,12 +65,10 @@ export class CreateUserController {
     try {
       const result = await this.createUserUseCase.execute(createdUser);
 
-      return create<UserType>(result);
+      return create(result);
     } catch (error) {
       console.error(error);
-      return serverError({
-        message: "Internal Server Error",
-      });
+      return serverError();
     }
   }
 }
