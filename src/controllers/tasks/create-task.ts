@@ -2,6 +2,7 @@ import { type Request } from "express";
 import type { CreateTaskUseCase } from "../../use-cases/tasks/create-task";
 import type { BodyParams } from "../../models/tasks/create-task";
 import validator from "validator";
+import { badRequest } from "../../helpers/http";
 
 type RequiredFields = keyof BodyParams;
 export class CreateTaskController {
@@ -18,10 +19,7 @@ export class CreateTaskController {
       const checkIfIsValidId = validator.isUUID(userId);
 
       if (!checkIfIsValidId) {
-        return {
-          statusCode: 400,
-          body: { message: "the provided UUID is invalid." },
-        };
+        return badRequest({ message: "the provided UUID is invalid." });
       }
 
       const requiredFields: RequiredFields[] = [
@@ -34,10 +32,7 @@ export class CreateTaskController {
 
       for (const field of requiredFields) {
         if (!params[field]) {
-          return {
-            statusCode: 400,
-            body: { message: `field ${field} is missing.` },
-          };
+          return badRequest({ message: `field ${field} is missing.` });
         }
       }
 

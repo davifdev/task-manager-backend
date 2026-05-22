@@ -14,9 +14,9 @@ export const serverError = (body: ServerError) => {
   };
 };
 
-export const ok = <T>(body: T) => {
+export const create = <T>(body: T) => {
   return {
-    statusCode: 200,
+    statusCode: 201,
     body,
   };
 };

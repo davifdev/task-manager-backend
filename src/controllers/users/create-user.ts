@@ -6,7 +6,7 @@ import type {
 } from "../../models/users/create-user";
 import validator from "validator";
 import bcrypt from "bcrypt";
-import { badRequest, ok, serverError } from "../../helpers/http";
+import { badRequest, create, serverError } from "../../helpers/http";
 
 type RequiredFields = keyof BodyParamsCreateUser;
 export class CreateUserController {
@@ -68,7 +68,7 @@ export class CreateUserController {
     try {
       const result = await this.createUserUseCase.execute(createdUser);
 
-      return ok<UserType>(result);
+      return create<UserType>(result);
     } catch (error) {
       console.error(error);
       return serverError({
