@@ -1,12 +1,12 @@
 import express from "express";
 
-import { createTaskFactory } from "./factories/tasks";
+import { createTaskFactory, deleteTaskFactory } from "./factories/tasks";
 import { createUserFactory } from "./factories/users";
 
 const app = express();
 app.use(express.json());
 
-app.post("/tasks", async (request, response) => {
+app.post("/api/tasks", async (request, response) => {
   const createTaskController = createTaskFactory();
 
   const { body, statusCode } = await createTaskController.execute(request);
@@ -14,10 +14,18 @@ app.post("/tasks", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-app.post("/users", async (request, response) => {
+app.post("/api/users", async (request, response) => {
   const createUserController = createUserFactory();
 
   const { body, statusCode } = await createUserController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.delete("/api/tasks/:taskId", async (request, response) => {
+  const deleteTaskController = deleteTaskFactory();
+
+  const { body, statusCode } = await deleteTaskController.execute(request);
 
   response.status(statusCode).json(body);
 });

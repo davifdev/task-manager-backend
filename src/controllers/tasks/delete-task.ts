@@ -1,12 +1,12 @@
 import validator from "validator";
 import { type Request } from "express";
 import { badRequest, ok, serverError } from "../../helpers/http";
+import type { DeleteTaskUseCase } from "../../use-cases/tasks/delete-task";
 
 export class DeleteTaskController {
   private readonly deleteTaskUseCase;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(deleteTaskUseCase: any) {
+  constructor(deleteTaskUseCase: DeleteTaskUseCase) {
     this.deleteTaskUseCase = deleteTaskUseCase;
   }
 

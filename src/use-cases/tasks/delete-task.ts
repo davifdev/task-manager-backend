@@ -1,13 +1,14 @@
+import type { DeleteTaskRepository } from "../../repositories/tasks/delete-task";
+
 export class DeleteTaskUseCase {
   private readonly deleteTaskRepository;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(deleteTaskRepository: any) {
+  constructor(deleteTaskRepository: DeleteTaskRepository) {
     this.deleteTaskRepository = deleteTaskRepository;
   }
 
   async execute(taskId: string) {
-    const deletedTask = await this.deleteTaskRepository(taskId);
+    const deletedTask = await this.deleteTaskRepository.execute(taskId);
 
     return deletedTask;
   }
