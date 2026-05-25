@@ -20,3 +20,10 @@ export const create = <T>(body: T) => {
     body,
   };
 };
+
+export const ok = <T>(body: T) => {
+  return {
+    statusCode: 200,
+    body,
+  };
+};
