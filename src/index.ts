@@ -1,10 +1,22 @@
 import express from "express";
 
-import { createTaskFactory, deleteTaskFactory } from "./factories/tasks";
+import {
+  createTaskFactory,
+  deleteTaskFactory,
+  getTasksFactory,
+} from "./factories/tasks";
 import { createUserFactory } from "./factories/users";
 
 const app = express();
 app.use(express.json());
+
+app.get("/api/tasks", async (request, response) => {
+  const getTasksController = getTasksFactory();
+
+  const { body, statusCode } = await getTasksController.execute();
+
+  response.status(statusCode).json(body);
+});
 
 app.post("/api/tasks", async (request, response) => {
   const createTaskController = createTaskFactory();

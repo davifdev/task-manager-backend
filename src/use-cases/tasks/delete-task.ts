@@ -1,3 +1,4 @@
+import type { TaskType } from "../../models/tasks/create-task";
 import type { DeleteTaskRepository } from "../../repositories/tasks/delete-task";
 
 export class DeleteTaskUseCase {
@@ -8,7 +9,8 @@ export class DeleteTaskUseCase {
   }
 
   async execute(taskId: string) {
-    const deletedTask = await this.deleteTaskRepository.execute(taskId);
+    const deletedTask: TaskType =
+      await this.deleteTaskRepository.execute(taskId);
 
     return deletedTask;
   }

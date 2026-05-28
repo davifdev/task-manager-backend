@@ -8,9 +8,9 @@ export type BodyParams = {
 
 export type TaskType = {
   id: string;
+  user_id: string;
   title: string;
   status: string;
   time: string;
   description: string;
-  user_id: string;
 };

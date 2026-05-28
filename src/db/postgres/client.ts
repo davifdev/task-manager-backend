@@ -11,7 +11,7 @@ export const pool = new Pool({
 });
 
 export const PostgresClient = {
-  query: async (query: string, params?: any[]) => {
+  query: async <T>(query: string, params?: T[]) => {
     const client = await pool.connect();
 
     const result = await client.query(query, params);
