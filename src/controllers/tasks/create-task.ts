@@ -3,6 +3,7 @@ import type { CreateTaskUseCase } from "../../use-cases/tasks/create-task";
 import type { BodyParams } from "../../models/tasks/create-task";
 import validator from "validator";
 import { badRequest, create, serverError } from "../../helpers/http";
+import { idIsInvalidResponse } from "../../helpers/message-response";
 
 type RequiredFields = keyof BodyParams;
 export class CreateTaskController {
@@ -19,7 +20,7 @@ export class CreateTaskController {
       const checkIfIsValidId = validator.isUUID(userId);
 
       if (!checkIfIsValidId) {
-        return badRequest({ message: "the provided UUID is invalid." });
+        return idIsInvalidResponse();
       }
 
       const requiredFields: RequiredFields[] = [

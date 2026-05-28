@@ -1,23 +1,19 @@
-import type { BodyParams } from "../controllers/tasks/create-task";
+export const checkIfIsString = (param: string) => {
+  return typeof param === "string";
+};
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const checkRequiredFields = (
-  params: BodyParams,
-  requiredFields: string[],
-) => {
-  for (const field of requiredFields) {
-    const fieldIsMissing = !params[field];
+export const checkIfTimeIsValid = (param: string) => {
+  return param === "morning" || param === "afternoon" || param === "evening";
+};
 
-    if (fieldIsMissing) {
-      return {
-        missingField: field,
-        ok: false,
-      };
-    }
-  }
+export const checkIfStatusIsValid = (param: string) => {
+  return (
+    param === "is_pending" ||
+    param === "in_progress" ||
+    param === "is_completed"
+  );
+};
 
-  return {
-    missingField: null,
-    ok: true,
-  };
+export const checkIfDescriptionIsValid = (param: string) => {
+  return param.length > 3;
 };

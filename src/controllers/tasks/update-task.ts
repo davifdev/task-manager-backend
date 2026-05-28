@@ -1,8 +1,24 @@
-import { badRequest, notFound, ok, serverError } from "../../helpers/http";
+import { ok, serverError } from "../../helpers/http";
 import validator from "validator";
 import { type Request } from "express";
 import type { UpdateTaskUseCase } from "../../use-cases/tasks/update-task";
 import type { UpdateTaskParams } from "../../models/tasks/create-task";
+import {
+  checkIfDescriptionIsValid,
+  checkIfIsString,
+  checkIfStatusIsValid,
+  checkIfTimeIsValid,
+} from "../../helpers/validation";
+import {
+  descriptionIsInvalidResponse,
+  descriptionIsNotString,
+  idIsInvalidResponse,
+  someFieldIsNotAllowedResponse,
+  statusIsInvalidResponse,
+  taskNotFoundResponse,
+  timeIsInvalidResponse,
+  titleIsInvalidResponse,
+} from "../../helpers/message-response";
 export class UpdateTaskController {
   private readonly updateTaskUseCase;
 
@@ -17,9 +33,7 @@ export class UpdateTaskController {
 
       const checkIfIsValidId = validator.isUUID(taskId);
       if (!checkIfIsValidId) {
-        return badRequest({
-          message: "The provided UUID is invalid.",
-        });
+        return idIsInvalidResponse();
       }
 
       const allowedFields = ["title", "time", "status", "description"];
@@ -29,62 +43,47 @@ export class UpdateTaskController {
       );
 
       if (someFieldIsNotAllowed) {
-        return badRequest({
-          message: "Some provided field is not allowed",
-        });
+        return someFieldIsNotAllowedResponse();
       }
 
       if (updateTaskParams.title) {
-        const titleIsValid = typeof updateTaskParams.title === "string";
+        const titleIsValid = checkIfIsString(updateTaskParams.title);
 
         if (!titleIsValid) {
-          return badRequest({
-            message: "The title must be a string",
-          });
+          return titleIsInvalidResponse();
         }
       }
 
       if (updateTaskParams.time) {
-        const timeIsValid =
-          updateTaskParams.time === "morning" ||
-          updateTaskParams.time === "afternoon" ||
-          updateTaskParams.time === "evening";
+        const timeIsValid = checkIfTimeIsValid(updateTaskParams.time);
 
         if (!timeIsValid) {
-          return badRequest({
-            message: "The time must be a morning, afternoon or evening",
-          });
+          return timeIsInvalidResponse();
         }
       }
 
       if (updateTaskParams.status) {
-        const statusIsValid =
-          updateTaskParams.status === "is_pending" ||
-          updateTaskParams.status === "in_progress" ||
-          updateTaskParams.status === "is_completed";
+        const statusIsValid = checkIfStatusIsValid(updateTaskParams.status);
 
         if (!statusIsValid) {
-          return badRequest({
-            message:
-              "The status must be a is_pending, in_progress or is_completed",
-          });
+          return statusIsInvalidResponse();
         }
       }
 
       if (updateTaskParams.description) {
-        const descriptionIsString =
-          typeof updateTaskParams.description === "string";
-        const descriptionIsValid = updateTaskParams.description.length > 3;
+        const descriptionIsString = checkIfIsString(
+          updateTaskParams.description,
+        );
+        const descriptionIsValid = checkIfDescriptionIsValid(
+          updateTaskParams.description,
+        );
+
         if (!descriptionIsString) {
-          return badRequest({
-            message: "The description must be a string",
-          });
+          return descriptionIsNotString();
         }
 
         if (!descriptionIsValid) {
-          return badRequest({
-            message: "The description must be at least 3 characters",
-          });
+          return descriptionIsInvalidResponse();
         }
       }
 
@@ -94,9 +93,7 @@ export class UpdateTaskController {
       );
 
       if (!result) {
-        return notFound({
-          message: "task not found",
-        });
+        return taskNotFoundResponse();
       }
 
       return ok(result);
