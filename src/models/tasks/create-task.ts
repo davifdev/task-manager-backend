@@ -14,3 +14,10 @@ export type TaskType = {
   time: string;
   description: string;
 };
+
+export type UpdateTaskParams = {
+  title: string;
+  time: string;
+  description: string;
+  status: string;
+};

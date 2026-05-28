@@ -4,6 +4,7 @@ import {
   createTaskFactory,
   deleteTaskFactory,
   getTasksFactory,
+  updateTaskFactory,
 } from "./factories/tasks";
 import { createUserFactory } from "./factories/users";
 
@@ -30,6 +31,14 @@ app.post("/api/users", async (request, response) => {
   const createUserController = createUserFactory();
 
   const { body, statusCode } = await createUserController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.patch("/api/users/:taskId", async (request, response) => {
+  const updateTaskController = updateTaskFactory();
+
+  const { body, statusCode } = await updateTaskController.execute(request);
 
   response.status(statusCode).json(body);
 });

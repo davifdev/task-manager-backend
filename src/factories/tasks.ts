@@ -1,12 +1,15 @@
 import { CreateTaskController } from "../controllers/tasks/create-task";
 import { DeleteTaskController } from "../controllers/tasks/delete-task";
 import { GetTasksController } from "../controllers/tasks/get-task";
+import { UpdateTaskController } from "../controllers/tasks/update-task";
 import { CreateTaskRepository } from "../repositories/tasks/create-task";
 import { DeleteTaskRepository } from "../repositories/tasks/delete-task";
 import { GetTasksRepository } from "../repositories/tasks/get-task";
+import { UpdateTaskRepository } from "../repositories/tasks/update-task";
 import { CreateTaskUseCase } from "../use-cases/tasks/create-task";
 import { DeleteTaskUseCase } from "../use-cases/tasks/delete-task";
 import { GetTasksUseCase } from "../use-cases/tasks/get-task";
+import { UpdateTaskUseCase } from "../use-cases/tasks/update-task";
 
 export const getTasksFactory = () => {
   const getTasksRepository = new GetTasksRepository();
@@ -22,6 +25,14 @@ export const createTaskFactory = () => {
   const createTaskController = new CreateTaskController(createTaskUseCase);
 
   return createTaskController;
+};
+
+export const updateTaskFactory = () => {
+  const updateTaskRepository = new UpdateTaskRepository();
+  const updateTaskUseCase = new UpdateTaskUseCase(updateTaskRepository);
+  const updateTaskController = new UpdateTaskController(updateTaskUseCase);
+
+  return updateTaskController;
 };
 
 export const deleteTaskFactory = () => {
