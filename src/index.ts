@@ -3,6 +3,7 @@ import express from "express";
 import {
   createTaskFactory,
   deleteTaskFactory,
+  deleteTasksManyFactory,
   getTasksFactory,
   updateTaskFactory,
 } from "./factories/tasks";
@@ -39,6 +40,14 @@ app.patch("/api/tasks/:taskId", async (request, response) => {
   const updateTaskController = updateTaskFactory();
 
   const { body, statusCode } = await updateTaskController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.delete("/api/tasks/delete-many", async (request, response) => {
+  const deleteTasksManyController = deleteTasksManyFactory();
+
+  const { body, statusCode } = await deleteTasksManyController.execute();
 
   response.status(statusCode).json(body);
 });
