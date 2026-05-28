@@ -35,7 +35,7 @@ app.post("/api/users", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-app.patch("/api/users/:taskId", async (request, response) => {
+app.patch("/api/tasks/:taskId", async (request, response) => {
   const updateTaskController = updateTaskFactory();
 
   const { body, statusCode } = await updateTaskController.execute(request);
