@@ -1,8 +1,7 @@
 import validator from "validator";
 import { type Request } from "express";
-import { badRequest, ok, serverError } from "../../helpers/http";
+import { badRequest, notFound, ok, serverError } from "../../helpers/http";
 import type { DeleteTaskUseCase } from "../../use-cases/tasks/delete-task";
-
 export class DeleteTaskController {
   private readonly deleteTaskUseCase;
 
@@ -23,6 +22,12 @@ export class DeleteTaskController {
       }
 
       const deletedTask = await this.deleteTaskUseCase.execute(taskId);
+
+      if (!deletedTask) {
+        return notFound({
+          message: "task not found",
+        });
+      }
 
       return ok(deletedTask);
     } catch (error) {

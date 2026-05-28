@@ -10,6 +10,9 @@ export class GetTasksController {
   }
 
   async execute() {
+    // Valida se um uuid é válido
+
+    // Pega o usuário através do uuid se o usuário não existir retornar error
     try {
       const result = await this.getTasksUseCase.execute();
 

@@ -1,8 +1,15 @@
-import type { BadRequest } from "../models/http/http.model";
+import type { BadRequest, NotFound } from "../models/http/http.model";
 
 export const badRequest = (body: BadRequest) => {
   return {
     statusCode: 400,
+    body,
+  };
+};
+
+export const notFound = (body: NotFound) => {
+  return {
+    statusCode: 404,
     body,
   };
 };
