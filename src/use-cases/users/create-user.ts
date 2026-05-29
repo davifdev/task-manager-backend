@@ -1,11 +1,13 @@
-import "dotenv/config";
 import crypto from "crypto";
 import { CreateUserRepository } from "../../repositories/user/create-user";
 import type {
   BodyParamsCreateUser,
   UserType,
 } from "../../models/users/create-user";
-import jwt from "jsonwebtoken";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../helpers/tokens";
 
 export class CreateUserUseCase {
   private readonly createUserRepository;
@@ -24,20 +26,8 @@ export class CreateUserUseCase {
 
     const result: UserType = await this.createUserRepository.execute(params);
 
-    const accessToken = jwt.sign(
-      { userId: result.id },
-      process.env.SECRET_KEY as string,
-      {
-        expiresIn: "15m",
-      },
-    );
-    const refreshToken = jwt.sign(
-      { userId: result.id },
-      process.env.SECRET_REFRESH_KEY as string,
-      {
-        expiresIn: "15d",
-      },
-    );
+    const accessToken = generateAccessToken(result.id);
+    const refreshToken = generateRefreshToken(result.id);
 
     return {
       ...result,
