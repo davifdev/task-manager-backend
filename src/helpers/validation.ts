@@ -1,3 +1,5 @@
+import validator from "validator";
+
 export const checkIfIsString = (param: string) => {
   return typeof param === "string";
 };
@@ -16,4 +18,16 @@ export const checkIfStatusIsValid = (param: string) => {
 
 export const checkIfDescriptionIsValid = (param: string) => {
   return param.length > 3;
+};
+
+export const checkIfPasswordIsValid = (password: string) => {
+  return password.length >= 6;
+};
+
+export const checkIfEmailIsValid = (email: string) => {
+  return validator.isEmail(email);
+};
+
+export const checkIfParameterSizeIsValid = (field: string) => {
+  return field.length > 3;
 };

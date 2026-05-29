@@ -1,9 +1,13 @@
 import { type Request } from "express";
 import type { CreateUserUseCase } from "../../use-cases/users/create-user";
 import type { BodyParamsCreateUser } from "../../models/users/create-user";
-import validator from "validator";
 import bcrypt from "bcrypt";
 import { badRequest, create, serverError } from "../../helpers/http";
+import {
+  checkIfEmailIsValid,
+  checkIfParameterSizeIsValid,
+  checkIfPasswordIsValid,
+} from "../../helpers/validation";
 
 type RequiredFields = keyof BodyParamsCreateUser;
 export class CreateUserController {
@@ -30,26 +34,26 @@ export class CreateUserController {
         }
       }
 
-      const firstNameIsValid = params.first_name.length > 3;
+      const firstNameIsValid = checkIfParameterSizeIsValid(params.first_name);
       if (!firstNameIsValid) {
         return badRequest({
           message: "first_name must have more than 3 characters.",
         });
       }
 
-      const lastNameIsValid = params.last_name.length > 3;
+      const lastNameIsValid = checkIfParameterSizeIsValid(params.last_name);
       if (!lastNameIsValid) {
         return badRequest({
           message: "last_name must have more than 3 characters.",
         });
       }
 
-      const emailIsValid = validator.isEmail(params.email);
+      const emailIsValid = checkIfEmailIsValid(params.email);
       if (!emailIsValid) {
         return badRequest({ message: "email is invalid" });
       }
 
-      const passwordIsValid = params.password.length >= 6;
+      const passwordIsValid = checkIfPasswordIsValid(params.password);
       if (!passwordIsValid) {
         return badRequest({
           message: "password must have at least 6 characters.",
