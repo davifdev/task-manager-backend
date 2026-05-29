@@ -7,7 +7,7 @@ import {
   getTasksFactory,
   updateTaskFactory,
 } from "./factories/tasks";
-import { createUserFactory } from "./factories/users";
+import { createUserFactory, loginUserFactory } from "./factories/users";
 
 const app = express();
 app.use(express.json());
@@ -24,6 +24,14 @@ app.post("/api/tasks", async (request, response) => {
   const createTaskController = createTaskFactory();
 
   const { body, statusCode } = await createTaskController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.post("/api/users/signin", async (request, response) => {
+  const loginUserController = loginUserFactory();
+
+  const { body, statusCode } = await loginUserController.execute(request);
 
   response.status(statusCode).json(body);
 });
