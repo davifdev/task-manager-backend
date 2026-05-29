@@ -28,7 +28,7 @@ app.post("/api/tasks", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-app.post("/api/users", async (request, response) => {
+app.post("/api/users/signup", async (request, response) => {
   const createUserController = createUserFactory();
 
   const { body, statusCode } = await createUserController.execute(request);
