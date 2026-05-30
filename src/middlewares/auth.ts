@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-import { unauthorized } from "../helpers/http";
 
 export const authMiddleware = (
   request: Request,
@@ -10,12 +9,10 @@ export const authMiddleware = (
   try {
     const accessToken = request.headers.authorization?.split(" ")[1];
 
-    const { body, statusCode } = unauthorized({
-      message: "the provided token is invalid",
-    });
-
     if (!accessToken) {
-      return response.status(statusCode).json(body);
+      return response.status(401).json({
+        message: "token not found",
+      });
     }
 
     const tokenPayload = jwt.verify(
@@ -27,7 +24,6 @@ export const authMiddleware = (
 
     next();
   } catch (error) {
-    console.error(error);
     if (error instanceof jwt.TokenExpiredError) {
       return response.status(401).json({ message: error.message });
     }
