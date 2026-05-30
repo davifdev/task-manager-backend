@@ -8,14 +8,15 @@ import {
   updateTaskFactory,
 } from "./factories/tasks";
 import { createUserFactory, loginUserFactory } from "./factories/users";
+import { authMiddleware } from "./middlewares/auth";
 
 const app = express();
 app.use(express.json());
 
-app.get("/api/tasks", async (request, response) => {
+app.get("/api/tasks", authMiddleware, async (request, response) => {
   const getTasksController = getTasksFactory();
 
-  const { body, statusCode } = await getTasksController.execute();
+  const { body, statusCode } = await getTasksController.execute(request);
 
   response.status(statusCode).json(body);
 });

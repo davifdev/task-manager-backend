@@ -8,3 +8,8 @@ export class EmailOrPasswordIsInvalid extends Error {
     super("Email or password is invalid");
   }
 }
+export class TaskNotFound extends Error {
+  constructor() {
+    super("task is not found");
+  }
+}

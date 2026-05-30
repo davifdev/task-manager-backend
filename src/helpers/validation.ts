@@ -31,3 +31,7 @@ export const checkIfEmailIsValid = (email: string) => {
 export const checkIfParameterSizeIsValid = (field: string) => {
   return field.length > 3;
 };
+
+export const checkIfIdIsValid = (id: string) => {
+  return validator.isUUID(id);
+};

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-import { serverError, unauthorized } from "../helpers/http";
+import { unauthorized } from "../helpers/http";
 
 export const authMiddleware = (
   request: Request,
@@ -28,6 +28,8 @@ export const authMiddleware = (
     next();
   } catch (error) {
     console.error(error);
-    return serverError();
+    if (error instanceof jwt.TokenExpiredError) {
+      return response.status(401).json({ message: error.message });
+    }
   }
 };

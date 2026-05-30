@@ -1,3 +1,4 @@
+import { TaskNotFound } from "../../helpers/errors";
 import type { TaskType } from "../../models/tasks/create-task";
 import type { GetTasksRepository } from "../../repositories/tasks/get-task";
 
@@ -8,8 +9,12 @@ export class GetTasksUseCase {
     this.getTasksRepository = getTasksRepository;
   }
 
-  async execute() {
-    const result: TaskType[] = await this.getTasksRepository.execute();
+  async execute(userId: string) {
+    const result: TaskType[] = await this.getTasksRepository.execute(userId);
+
+    if (!result) {
+      throw new TaskNotFound();
+    }
 
     return result;
   }

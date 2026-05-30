@@ -1,6 +1,9 @@
-import { ok, serverError } from "../../helpers/http";
-
+import { type Request } from "express";
+import { badRequest, ok, serverError } from "../../helpers/http";
 import type { GetTasksUseCase } from "../../use-cases/tasks/get-task";
+import { checkIfIdIsValid } from "../../helpers/validation";
+import { idIsInvalidResponse } from "../../helpers/message-response";
+import { TaskNotFound } from "../../helpers/errors";
 
 export class GetTasksController {
   private readonly getTasksUseCase;
@@ -9,16 +12,24 @@ export class GetTasksController {
     this.getTasksUseCase = getTaskUseCase;
   }
 
-  async execute() {
-    // Valida se um uuid é válido
+  async execute(httpRequest: Request) {
+    const userId = httpRequest.userId as string;
+    const userIdIsValid = checkIfIdIsValid(userId);
+    if (!userIdIsValid) {
+      return idIsInvalidResponse();
+    }
 
-    // Pega o usuário através do uuid se o usuário não existir retornar error
     try {
-      const result = await this.getTasksUseCase.execute();
+      const result = await this.getTasksUseCase.execute(userId);
 
       return ok(result);
     } catch (error) {
       console.error(error);
+      if (error instanceof TaskNotFound) {
+        return badRequest({
+          message: error.message,
+        });
+      }
       return serverError();
     }
   }
