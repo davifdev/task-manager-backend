@@ -1,4 +1,15 @@
-import type { BadRequest, NotFound } from "../models/http/http.model";
+import type {
+  BadRequest,
+  NotFound,
+  Unauthorized,
+} from "../models/http/http.model";
+
+export const unauthorized = (body: Unauthorized) => {
+  return {
+    statusCode: 401,
+    body,
+  };
+};
 
 export const badRequest = (body: BadRequest) => {
   return {

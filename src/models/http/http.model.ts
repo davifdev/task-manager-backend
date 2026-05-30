@@ -5,3 +5,7 @@ export type BadRequest = {
 export type NotFound = {
   message: string;
 };
+
+export type Unauthorized = {
+  message: string;
+};
