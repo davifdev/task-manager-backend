@@ -13,3 +13,8 @@ export class TaskNotFound extends Error {
     super("task is not found");
   }
 }
+export class InvalidToken extends Error {
+  constructor() {
+    super("Invalid token");
+  }
+}
