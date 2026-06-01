@@ -1,7 +1,7 @@
 import { type Request } from "express";
 import type { RefreshTokenUseCase } from "../../use-cases/users/refresh-token";
-import { ok, unauthorized } from "../../helpers/http";
-import { InvalidToken } from "../../helpers/errors";
+import { ok, serverError, unauthorized } from "../../helpers/http";
+import jwt from "jsonwebtoken";
 
 export class RefreshTokenController {
   private readonly refreshTokenUseCase;
@@ -13,18 +13,20 @@ export class RefreshTokenController {
   async execute(httpRequest: Request) {
     try {
       const params = httpRequest.body;
-
+      console.log("token", params.refreshToken);
       const result = await this.refreshTokenUseCase.execute(
         params.refreshToken,
       );
 
       return ok(result);
     } catch (error) {
-      if (error instanceof InvalidToken) {
+      console.error(error);
+      if (error instanceof jwt.JsonWebTokenError) {
         return unauthorized({
           message: error.message,
         });
       }
+      return serverError();
     }
   }
 }

@@ -7,7 +7,11 @@ import {
   getTasksFactory,
   updateTaskFactory,
 } from "./factories/tasks";
-import { createUserFactory, loginUserFactory } from "./factories/users";
+import {
+  createUserFactory,
+  loginUserFactory,
+  refreshTokenFactory,
+} from "./factories/users";
 import { authMiddleware } from "./middlewares/auth";
 
 const app = express();
@@ -41,6 +45,14 @@ app.post("/api/users/signup", async (request, response) => {
   const createUserController = createUserFactory();
 
   const { body, statusCode } = await createUserController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.post("/api/users/refresh-token", async (request, response) => {
+  const refreshTokenController = refreshTokenFactory();
+
+  const { body, statusCode } = await refreshTokenController.execute(request);
 
   response.status(statusCode).json(body);
 });
