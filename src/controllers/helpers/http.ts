@@ -2,7 +2,7 @@ import type {
   BadRequest,
   NotFound,
   Unauthorized,
-} from "../models/http/http.model";
+} from "../../models/http/http.model";
 
 export const unauthorized = (body: Unauthorized) => {
   return {

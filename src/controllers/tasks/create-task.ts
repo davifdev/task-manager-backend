@@ -1,7 +1,7 @@
 import { type Request } from "express";
 import type { CreateTaskUseCase } from "../../use-cases/tasks/create-task";
 import type { BodyParams } from "../../models/tasks/create-task";
-import { badRequest, create, serverError } from "../../helpers/http";
+import { badRequest, create, serverError } from "../helpers/http";
 
 type RequiredFields = keyof BodyParams;
 export class CreateTaskController {

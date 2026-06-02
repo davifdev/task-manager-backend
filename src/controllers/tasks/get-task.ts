@@ -1,10 +1,9 @@
 import { type Request } from "express";
-import { badRequest, ok, serverError } from "../../helpers/http";
+import { badRequest, ok, serverError } from "../helpers/http";
 import type { GetTasksUseCase } from "../../use-cases/tasks/get-task";
 import { checkIfIdIsValid } from "../../helpers/validation";
-import { idIsInvalidResponse } from "../../helpers/message-response";
+import { idIsInvalidResponse } from "../helpers/response-message";
 import { TaskNotFound } from "../../helpers/errors";
-
 export class GetTasksController {
   private readonly getTasksUseCase;
 
@@ -14,6 +13,7 @@ export class GetTasksController {
 
   async execute(httpRequest: Request) {
     const userId = httpRequest.userId as string;
+
     const userIdIsValid = checkIfIdIsValid(userId);
     if (!userIdIsValid) {
       return idIsInvalidResponse();

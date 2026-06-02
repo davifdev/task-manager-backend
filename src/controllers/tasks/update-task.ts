@@ -1,4 +1,4 @@
-import { ok, serverError } from "../../helpers/http";
+import { ok, serverError } from "../helpers/http";
 import validator from "validator";
 import { type Request } from "express";
 import type { UpdateTaskUseCase } from "../../use-cases/tasks/update-task";
@@ -18,7 +18,7 @@ import {
   taskNotFoundResponse,
   timeIsInvalidResponse,
   titleIsInvalidResponse,
-} from "../../helpers/message-response";
+} from "../helpers/response-message";
 export class UpdateTaskController {
   private readonly updateTaskUseCase;
 

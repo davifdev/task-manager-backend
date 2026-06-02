@@ -1,6 +1,5 @@
-import { ok, serverError } from "../../helpers/http";
+import { ok, serverError } from "../helpers/http";
 import type { DeleteTasksManyUseCase } from "../../use-cases/tasks/delete-task-many";
-
 export class DeleteTasksManyController {
   private readonly deleteTasksManyUseCase;
 

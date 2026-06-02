@@ -5,6 +5,7 @@ export class GetTasksRepository {
       "SELECT * FROM tasks WHERE user_id = $1",
       [userId],
     );
+
     return result;
   }
 }
