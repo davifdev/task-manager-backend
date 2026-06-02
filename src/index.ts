@@ -5,6 +5,7 @@ import {
   deleteTaskFactory,
   deleteTasksManyFactory,
   getTasksFactory,
+  getUniqueTaskFactory,
   updateTaskFactory,
 } from "./factories/tasks";
 import {
@@ -21,6 +22,14 @@ app.get("/api/tasks", authMiddleware, async (request, response) => {
   const getTasksController = getTasksFactory();
 
   const { body, statusCode } = await getTasksController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+app.get("/api/tasks/:taskId", authMiddleware, async (request, response) => {
+  const getUniqueTaskControlelr = getUniqueTaskFactory();
+
+  const { body, statusCode } = await getUniqueTaskControlelr.execute(request);
 
   response.status(statusCode).json(body);
 });

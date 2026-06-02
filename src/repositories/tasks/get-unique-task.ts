@@ -7,6 +7,6 @@ export class GetUniqueTaskRepository {
       [taskId],
     );
 
-    return result;
+    return result[0];
   }
 }

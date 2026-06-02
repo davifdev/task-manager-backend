@@ -16,14 +16,6 @@ export class GetTasksUseCase {
       throw new TaskNotFound();
     }
 
-    const tasksMorning = result.filter(tasks => tasks.time === "morning");
-    const tasksAfternoon = result.filter(tasks => tasks.time === "afternoon");
-    const tasksEvening = result.filter(tasks => tasks.time === "evening");
-
-    return {
-      tasksMorning,
-      tasksAfternoon,
-      tasksEvening,
-    };
+    return result;
   }
 }
