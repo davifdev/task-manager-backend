@@ -1,20 +1,25 @@
-import bcrypt from "bcrypt";
 import {
   EmailOrPasswordIsInvalid,
   UserNotFoundError,
 } from "../../helpers/errors";
 import type { GetUserByEmailRepository } from "../../repositories/user/get-user-by-email";
 import type { LoginParams, UserType } from "../../models/users/create-user";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../../helpers/tokens";
+import type { GenerateTokensAdapter } from "../../adapters/generate-tokens";
+import type { PasswordCompareAdapter } from "../../adapters/password-compare";
 
 export class LoginUserUseCase {
   private readonly getUserByEmailRepository;
+  private readonly generateTokensAdapter;
+  private readonly passwordCompareAdapter;
 
-  constructor(getUserByEmailRepository: GetUserByEmailRepository) {
+  constructor(
+    getUserByEmailRepository: GetUserByEmailRepository,
+    generateTokensAdapter: GenerateTokensAdapter,
+    passwordCompareAdapter: PasswordCompareAdapter,
+  ) {
     this.getUserByEmailRepository = getUserByEmailRepository;
+    this.generateTokensAdapter = generateTokensAdapter;
+    this.passwordCompareAdapter = passwordCompareAdapter;
   }
 
   async execute(loginParams: LoginParams) {
@@ -26,20 +31,19 @@ export class LoginUserUseCase {
       throw new UserNotFoundError(email);
     }
 
-    const passwordCompare = await bcrypt.compare(password, user.password);
+    const passwordCompare = await this.passwordCompareAdapter.execute(
+      password,
+      user.password,
+    );
     if (!passwordCompare) {
       throw new EmailOrPasswordIsInvalid();
     }
 
-    const accessToken = generateAccessToken(user.id);
-    const refreshToken = generateRefreshToken(user.id);
+    const tokens = this.generateTokensAdapter.execute(user.id);
 
     return {
       ...user,
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
+      tokens,
     };
   }
 }
