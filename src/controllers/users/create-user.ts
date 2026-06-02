@@ -2,7 +2,7 @@ import { type Request } from "express";
 import type { CreateUserUseCase } from "../../use-cases/users/create-user";
 import type { BodyParamsCreateUser } from "../../models/users/create-user";
 import bcrypt from "bcrypt";
-import { badRequest, create, serverError } from "../../helpers/http";
+import { badRequest, create, serverError } from "../helpers/http";
 import {
   checkIfEmailIsValid,
   checkIfParameterSizeIsValid,
