@@ -1,25 +1,23 @@
-import "dotenv/config";
-import jwt from "jsonwebtoken";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../../helpers/tokens";
-
+import type { GenerateTokensAdapter } from "../../adapters/generate-tokens";
+import type { VerifyTokenAdapter } from "../../adapters/verify-token";
 export class RefreshTokenUseCase {
-  async execute(refreshToken: string) {
-    const payload = jwt.verify(
-      refreshToken,
-      process.env.SECRET_REFRESH_KEY as string,
-    ) as { userId: string };
+  private readonly generateTokensAdapter;
+  private readonly verifyTokenAdapter;
 
-    const newAccessToken = generateAccessToken(payload.userId);
-    const newRefreshToken = generateRefreshToken(payload.userId);
+  constructor(
+    generateTokensAdapter: GenerateTokensAdapter,
+    verifyTokenAdapter: VerifyTokenAdapter,
+  ) {
+    this.generateTokensAdapter = generateTokensAdapter;
+    this.verifyTokenAdapter = verifyTokenAdapter;
+  }
+
+  async execute(refreshToken: string) {
+    const payload = await this.verifyTokenAdapter.execute(refreshToken);
+    const tokens = this.generateTokensAdapter.execute(payload.userId);
 
     return {
-      tokens: {
-        newAccessToken,
-        newRefreshToken,
-      },
+      tokens,
     };
   }
 }

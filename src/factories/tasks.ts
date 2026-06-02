@@ -1,3 +1,4 @@
+import { GenerateIdAdapter } from "../adapters/generate-id";
 import { CreateTaskController } from "../controllers/tasks/create-task";
 import { DeleteTaskController } from "../controllers/tasks/delete-task";
 import { DeleteTasksManyController } from "../controllers/tasks/delete-task-many";
@@ -27,7 +28,11 @@ export const getTasksFactory = () => {
 
 export const createTaskFactory = () => {
   const createTaskRepository = new CreateTaskRepository();
-  const createTaskUseCase = new CreateTaskUseCase(createTaskRepository);
+  const generateIdAdapter = new GenerateIdAdapter();
+  const createTaskUseCase = new CreateTaskUseCase(
+    createTaskRepository,
+    generateIdAdapter,
+  );
   const createTaskController = new CreateTaskController(createTaskUseCase);
 
   return createTaskController;

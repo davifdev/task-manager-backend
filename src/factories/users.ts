@@ -1,3 +1,7 @@
+import { GenerateIdAdapter } from "../adapters/generate-id";
+import { GenerateTokensAdapter } from "../adapters/generate-tokens";
+import { PasswordCompareAdapter } from "../adapters/password-compare";
+import { VerifyTokenAdapter } from "../adapters/verify-token";
 import { CreateUserController } from "../controllers/users/create-user";
 import { LoginUserController } from "../controllers/users/login-user";
 import { RefreshTokenController } from "../controllers/users/refresh-token";
@@ -9,7 +13,13 @@ import { RefreshTokenUseCase } from "../use-cases/users/refresh-token";
 
 export const createUserFactory = () => {
   const createUserRepository = new CreateUserRepository();
-  const createUserUseCase = new CreateUserUseCase(createUserRepository);
+  const generateIdAdapter = new GenerateIdAdapter();
+  const generateTokensAdapter = new GenerateTokensAdapter();
+  const createUserUseCase = new CreateUserUseCase(
+    createUserRepository,
+    generateIdAdapter,
+    generateTokensAdapter,
+  );
   const createUserController = new CreateUserController(createUserUseCase);
 
   return createUserController;
@@ -17,14 +27,25 @@ export const createUserFactory = () => {
 
 export const loginUserFactory = () => {
   const getUserByEmailRepository = new GetUserByEmailRepository();
-  const loginUserUseCase = new LoginUserUseCase(getUserByEmailRepository);
+  const generateTokensAdapter = new GenerateTokensAdapter();
+  const passwordCompareAdapter = new PasswordCompareAdapter();
+  const loginUserUseCase = new LoginUserUseCase(
+    getUserByEmailRepository,
+    generateTokensAdapter,
+    passwordCompareAdapter,
+  );
   const loginUserUseController = new LoginUserController(loginUserUseCase);
 
   return loginUserUseController;
 };
 
 export const refreshTokenFactory = () => {
-  const refreshTokenUseCase = new RefreshTokenUseCase();
+  const generateTokensAdapter = new GenerateTokensAdapter();
+  const verifyTokenAdapter = new VerifyTokenAdapter();
+  const refreshTokenUseCase = new RefreshTokenUseCase(
+    generateTokensAdapter,
+    verifyTokenAdapter,
+  );
   const refreshTokenController = new RefreshTokenController(
     refreshTokenUseCase,
   );

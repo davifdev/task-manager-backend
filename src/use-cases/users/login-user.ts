@@ -35,6 +35,7 @@ export class LoginUserUseCase {
       password,
       user.password,
     );
+
     if (!passwordCompare) {
       throw new EmailOrPasswordIsInvalid();
     }
