@@ -7,7 +7,7 @@
   "scripts": {
     "migration": "npx tsx src/db/postgres/migrations/exec.ts",
     "start": "npx tsx --watch src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "prepare": "husky"
   },
   "keywords": [],
@@ -16,12 +16,14 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.0",
     "eslint": "^10.4.0",
     "git-commit-msg-linter": "^5.0.8",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
+    "jest": "^30.4.2",
     "jiti": "^2.7.0",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
