@@ -1,23 +1,27 @@
-import crypto from "crypto";
 import { CreateUserRepository } from "../../repositories/user/create-user";
 import type {
   BodyParamsCreateUser,
   UserType,
 } from "../../models/users/create-user";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../../helpers/tokens";
-
+import type { GenerateIdAdapter } from "../../adapters/generate-id";
+import type { GenerateTokensAdapter } from "../../adapters/generate-tokens";
 export class CreateUserUseCase {
   private readonly createUserRepository;
+  private readonly generateIdAdapter;
+  private readonly generateTokensAdapter;
 
-  constructor(createUserRepository: CreateUserRepository) {
+  constructor(
+    createUserRepository: CreateUserRepository,
+    generateIdAdapter: GenerateIdAdapter,
+    generateTokensAdapter: GenerateTokensAdapter,
+  ) {
     this.createUserRepository = createUserRepository;
+    this.generateIdAdapter = generateIdAdapter;
+    this.generateTokensAdapter = generateTokensAdapter;
   }
 
   async execute(createUserParams: BodyParamsCreateUser) {
-    const user_id = crypto.randomUUID();
+    const user_id = this.generateIdAdapter.execute();
 
     const params = {
       ...createUserParams,
@@ -26,15 +30,11 @@ export class CreateUserUseCase {
 
     const result: UserType = await this.createUserRepository.execute(params);
 
-    const accessToken = generateAccessToken(result.id);
-    const refreshToken = generateRefreshToken(result.id);
+    const tokens = this.generateTokensAdapter.execute(result.id);
 
     return {
       ...result,
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
+      tokens,
     };
   }
 }
