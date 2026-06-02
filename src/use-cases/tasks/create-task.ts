@@ -1,15 +1,20 @@
-import { v4 as uuidv4 } from "uuid";
+import type { GenerateIdAdapter } from "../../adapters/generate-id";
 import type { BodyParams, TaskType } from "../../models/tasks/create-task";
 import type { CreateTaskRepository } from "../../repositories/tasks/create-task";
 export class CreateTaskUseCase {
   private readonly createTaskRepository;
+  private readonly generateIdAdapter;
 
-  constructor(createTaskRepository: CreateTaskRepository) {
+  constructor(
+    createTaskRepository: CreateTaskRepository,
+    generateIdAdapter: GenerateIdAdapter,
+  ) {
     this.createTaskRepository = createTaskRepository;
+    this.generateIdAdapter = generateIdAdapter;
   }
 
   async execute(createTaskParams: BodyParams) {
-    const id = uuidv4();
+    const id = this.generateIdAdapter.execute();
 
     const result: TaskType = await this.createTaskRepository.execute({
       ...createTaskParams,
