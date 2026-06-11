@@ -14,7 +14,7 @@ export default defineConfig({
 
     globalSetup: ["vitest.global.setup.ts"],
 
-    include: ["src/**/*.{spec,test}.{ts}"],
+    include: ["src/**/*.{spec,test}.{ts, tsx}"],
 
     testTimeout: 10000,
 
@@ -23,7 +23,7 @@ export default defineConfig({
 
       provider: "v8",
 
-      include: ["src/**/*.{ts}"],
+      include: ["src/**/*.{ts, tsx}"],
 
       exclude: [
         "**/*.test.{ts}",
