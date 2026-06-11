@@ -55,4 +55,16 @@ describe("DeleteTaskController", () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  it("should call DeleteTaskUseCase with correct params", async () => {
+    const { sut, deleteTaskUseCase } = makeSut();
+
+    const deleteTaskSpy = vi
+      .spyOn(deleteTaskUseCase, "execute")
+      .mockResolvedValue(task);
+
+    await sut.execute(httpRequest as any);
+
+    expect(deleteTaskSpy).toHaveBeenCalledWith(httpRequest.params.taskId);
+  });
 });
