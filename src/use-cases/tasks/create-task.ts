@@ -1,5 +1,8 @@
 import type { GenerateIdAdapter } from "../../adapters/generate-id";
-import type { BodyParams, TaskType } from "../../models/tasks/create-task";
+import type {
+  BodyParams,
+  TaskType,
+} from "../../models/tasks/create-task.model";
 import type { CreateTaskRepository } from "../../repositories/tasks/create-task";
 export class CreateTaskUseCase {
   private readonly createTaskRepository;

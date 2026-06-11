@@ -1,4 +1,4 @@
-import type { TaskType } from "../../models/tasks/create-task";
+import type { TaskType } from "../../models/tasks/create-task.model";
 import type { DeleteTaskRepository } from "../../repositories/tasks/delete-task";
 
 export class DeleteTaskUseCase {

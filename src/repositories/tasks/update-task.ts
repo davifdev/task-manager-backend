@@ -1,5 +1,5 @@
 import { PostgresClient } from "../../db/postgres/client";
-import type { UpdateTaskParams } from "../../models/tasks/create-task";
+import type { UpdateTaskParams } from "../../models/tasks/create-task.model";
 
 type KeyType = keyof UpdateTaskParams;
 

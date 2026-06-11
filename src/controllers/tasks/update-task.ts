@@ -2,7 +2,7 @@ import { ok, serverError } from "../helpers/http";
 import validator from "validator";
 import { type Request } from "express";
 import type { UpdateTaskUseCase } from "../../use-cases/tasks/update-task";
-import type { UpdateTaskParams } from "../../models/tasks/create-task";
+import type { UpdateTaskParams } from "../../models/tasks/create-task.model";
 import {
   checkIfDescriptionIsValid,
   checkIfIsString,

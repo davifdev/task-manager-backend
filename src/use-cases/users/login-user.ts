@@ -3,7 +3,10 @@ import {
   UserNotFoundError,
 } from "../../helpers/errors";
 import type { GetUserByEmailRepository } from "../../repositories/user/get-user-by-email";
-import type { LoginParams, UserType } from "../../models/users/create-user";
+import type {
+  LoginParams,
+  UserType,
+} from "../../models/users/create-user.model";
 import type { GenerateTokensAdapter } from "../../adapters/generate-tokens";
 import type { PasswordCompareAdapter } from "../../adapters/password-compare";
 

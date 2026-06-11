@@ -1,7 +1,7 @@
 import type {
   TaskType,
   UpdateTaskParams,
-} from "../../models/tasks/create-task";
+} from "../../models/tasks/create-task.model";
 import type { UpdateTaskRepository } from "../../repositories/tasks/update-task";
 
 export class UpdateTaskUseCase {

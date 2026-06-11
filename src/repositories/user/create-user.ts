@@ -1,5 +1,5 @@
 import { PostgresClient } from "../../db/postgres/client";
-import type { UserType } from "../../models/users/create-user";
+import type { UserType } from "../../models/users/create-user.model";
 export class CreateUserRepository {
   async execute(createUserParams: UserType) {
     const result = await PostgresClient.query(

@@ -2,7 +2,7 @@ import { CreateUserRepository } from "../../repositories/user/create-user";
 import type {
   BodyParamsCreateUser,
   UserType,
-} from "../../models/users/create-user";
+} from "../../models/users/create-user.model";
 import type { GenerateIdAdapter } from "../../adapters/generate-id";
 import type { GenerateTokensAdapter } from "../../adapters/generate-tokens";
 export class CreateUserUseCase {

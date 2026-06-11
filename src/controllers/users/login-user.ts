@@ -5,7 +5,7 @@ import {
   checkIfEmailIsValid,
   checkIfPasswordIsValid,
 } from "../../helpers/validation";
-import type { LoginParams } from "../../models/users/create-user";
+import type { LoginParams } from "../../models/users/create-user.model";
 import { badRequest, notFound, ok, serverError } from "../helpers/http";
 import {
   EmailOrPasswordIsInvalid,

@@ -1,5 +1,5 @@
 import { TaskNotFound } from "../../helpers/errors";
-import type { TaskType } from "../../models/tasks/create-task";
+import type { TaskType } from "../../models/tasks/create-task.model";
 import type { GetTasksRepository } from "../../repositories/tasks/get-task";
 
 export class GetTasksUseCase {

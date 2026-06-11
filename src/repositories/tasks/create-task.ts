@@ -1,5 +1,5 @@
 import { PostgresClient } from "../../db/postgres/client";
-import type { TaskType } from "../../models/tasks/create-task";
+import type { TaskType } from "../../models/tasks/create-task.model";
 export class CreateTaskRepository {
   async execute(createTaskParams: TaskType) {
     const result = await PostgresClient.query(
