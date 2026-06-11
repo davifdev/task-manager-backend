@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { task } from "../../__tests__/tasks/create-task";
-import { faker } from "@faker-js/faker";
+import { task, taskCreated } from "../../__tests__/tasks/create-task";
 import { CreateTaskController } from "./create-task";
 
 describe("CreateTaskController", () => {
@@ -19,14 +18,6 @@ describe("CreateTaskController", () => {
       sut,
       createTaskUseCase,
     };
-  };
-
-  const taskCreated = {
-    user_id: faker.string.uuid(),
-    title: faker.lorem.words(1),
-    description: faker.lorem.words(1),
-    status: faker.lorem.words(1),
-    time: faker.lorem.words(1),
   };
 
   const httpRequest = {
@@ -116,5 +107,17 @@ describe("CreateTaskController", () => {
     const response = await sut.execute(httpRequest as any);
 
     expect(response.statusCode).toBe(500);
+  });
+
+  it("should call CreateTaskUseCase with correct params", async () => {
+    const { sut, createTaskUseCase } = makeSut();
+
+    const createTaskSpy = vi
+      .spyOn(createTaskUseCase, "execute")
+      .mockResolvedValue(task);
+
+    await sut.execute(httpRequest as any);
+
+    expect(createTaskSpy).toHaveBeenCalledWith(taskCreated);
   });
 });
