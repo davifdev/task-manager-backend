@@ -53,4 +53,17 @@ describe("CreateTaskController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if time is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      body: {
+        ...httpRequest.body,
+        time: "",
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
