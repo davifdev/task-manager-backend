@@ -32,4 +32,17 @@ describe("DeleteTaskController", () => {
 
     expect(result.statusCode).toBe(200);
   });
+
+  it("should return 400 if taskId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute({
+      params: {
+        ...httpRequest.params,
+        taskId: "",
+      },
+    } as any);
+
+    expect(result.statusCode).toBe(400);
+  });
 });
