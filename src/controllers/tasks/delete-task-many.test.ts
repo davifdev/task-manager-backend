@@ -22,4 +22,16 @@ describe("DeleteTaskManyController", () => {
 
     expect(response.statusCode).toBe(200);
   });
+
+  it("should return 500 if occurrs on error", async () => {
+    const { sut, deleteTaskManyUseCase } = makeSut();
+
+    vi.spyOn(deleteTaskManyUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const result = await sut.execute();
+
+    expect(result.statusCode).toBe(500);
+  });
 });
