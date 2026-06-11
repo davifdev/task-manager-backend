@@ -67,4 +67,16 @@ describe("DeleteTaskController", () => {
 
     expect(deleteTaskSpy).toHaveBeenCalledWith(httpRequest.params.taskId);
   });
+
+  it("should return 500 if occurrs on error", async () => {
+    const { sut, deleteTaskUseCase } = makeSut();
+
+    vi.spyOn(deleteTaskUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
