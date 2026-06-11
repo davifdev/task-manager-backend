@@ -92,4 +92,17 @@ describe("CreateTaskController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if user_id is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      body: {
+        ...httpRequest.body,
+        user_id: "",
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
