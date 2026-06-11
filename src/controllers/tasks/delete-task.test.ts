@@ -36,13 +36,23 @@ describe("DeleteTaskController", () => {
   it("should return 400 if taskId is invalid", async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute({
+    const response = await sut.execute({
       params: {
         ...httpRequest.params,
         taskId: "",
       },
     } as any);
 
-    expect(result.statusCode).toBe(400);
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 404 if task is not found", async () => {
+    const { sut, deleteTaskUseCase } = makeSut();
+
+    vi.spyOn(deleteTaskUseCase, "execute").mockResolvedValue(null as any);
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(404);
   });
 });
