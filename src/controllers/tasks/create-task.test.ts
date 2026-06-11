@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { task } from "../../__tests__/tasks/create-task";
 import { faker } from "@faker-js/faker";
 import { CreateTaskController } from "./create-task";
-import { type Request } from "express";
 
 describe("CreateTaskController", () => {
   class CreateTaskUseCaseStub {
@@ -13,7 +13,6 @@ describe("CreateTaskController", () => {
   const makeSut = () => {
     const createTaskUseCase = new CreateTaskUseCaseStub();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sut = new CreateTaskController(createTaskUseCase as any);
 
     return {
@@ -37,8 +36,21 @@ describe("CreateTaskController", () => {
   it("should return 201 when task created successfully", async () => {
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as Request);
+    const response = await sut.execute(httpRequest as any);
 
     expect(response.statusCode).toBe(201);
+  });
+
+  it("should return 400 if title is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      body: {
+        ...httpRequest.body,
+        title: "",
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
   });
 });
