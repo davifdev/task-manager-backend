@@ -45,6 +45,18 @@ describe("GetTasksController", () => {
     expect(response.statusCode).toBe(400);
   });
 
+  it("should call GetTasksUseCase with correct params", async () => {
+    const { sut, getTasksUseCase } = makeSut();
+
+    const getTaskSpy = vi
+      .spyOn(getTasksUseCase, "execute")
+      .mockResolvedValue([task]);
+
+    await sut.execute(httpRequest as any);
+
+    expect(getTaskSpy).toHaveBeenCalledWith(httpRequest.userId);
+  });
+
   it("should return 500 if occurr on error", async () => {
     const { sut, getTasksUseCase } = makeSut();
 
