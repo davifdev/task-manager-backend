@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faker } from "@faker-js/faker";
+import { faker, th } from "@faker-js/faker";
 import { task } from "../../__tests__/tasks/create-task";
 import { GetUniqueTaskController } from "./get-unique-task";
+import { TaskNotFound } from "../../helpers/errors";
 
 describe("GetUniqueTaskController", () => {
   class GetUniqueTaskUseCase {
@@ -55,5 +56,17 @@ describe("GetUniqueTaskController", () => {
     await sut.execute(httpRequest as any);
 
     expect(getUniqueTaskSpy).toHaveBeenCalledWith(httpRequest.params.taskId);
+  });
+
+  it("should throw TaskNotFound throws", async () => {
+    const { sut, getUniqueTaskUseCase } = makeSut();
+
+    vi.spyOn(getUniqueTaskUseCase, "execute").mockImplementation(() => {
+      throw new TaskNotFound();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(404);
   });
 });

@@ -4,7 +4,6 @@ import { checkIfIdIsValid } from "../../helpers/validation";
 import { idIsInvalidResponse } from "../helpers/response-message";
 import { notFound, ok, serverError } from "../helpers/http";
 import { TaskNotFound } from "../../helpers/errors";
-
 export class GetUniqueTaskController {
   private readonly getUniqueTaskUseCase;
 
