@@ -33,4 +33,15 @@ describe("GetUniqueTaskController", () => {
 
     expect(response.statusCode).toBe(200);
   });
+
+  it("should return 400 if taskId is not valid", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      taskId: "",
+    } as any);
+
+    expect(response.statusCode).toBe(200);
+  });
 });
