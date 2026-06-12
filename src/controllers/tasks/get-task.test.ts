@@ -43,4 +43,16 @@ describe("GetTasksController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 500 if occurr on error", async () => {
+    const { sut, getTasksUseCase } = makeSut();
+
+    vi.spyOn(getTasksUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
+  });
 });

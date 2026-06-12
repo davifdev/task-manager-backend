@@ -12,14 +12,13 @@ export class GetTasksController {
   }
 
   async execute(httpRequest: Request) {
-    const userId = httpRequest.userId as string;
-
-    const userIdIsValid = checkIfIdIsValid(userId);
-    if (!userIdIsValid) {
-      return idIsInvalidResponse();
-    }
-
     try {
+      const userId = httpRequest.userId as string;
+
+      const userIdIsValid = checkIfIdIsValid(userId);
+      if (!userIdIsValid) {
+        return idIsInvalidResponse();
+      }
       const result = await this.getTasksUseCase.execute(userId);
 
       return ok(result);
