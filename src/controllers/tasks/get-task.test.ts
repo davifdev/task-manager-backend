@@ -32,4 +32,15 @@ describe("GetTasksController", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toStrictEqual([task]);
   });
+
+  it("should return 400 if userId is not valid", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      userId: "",
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
