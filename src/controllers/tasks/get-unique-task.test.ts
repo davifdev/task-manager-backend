@@ -44,4 +44,16 @@ describe("GetUniqueTaskController", () => {
 
     expect(response.statusCode).toBe(200);
   });
+
+  it("should call GetUniqueTaskUseCase with correct params", async () => {
+    const { sut, getUniqueTaskUseCase } = makeSut();
+
+    const getUniqueTaskSpy = vi
+      .spyOn(getUniqueTaskUseCase, "execute")
+      .mockResolvedValue(task);
+
+    await sut.execute(httpRequest as any);
+
+    expect(getUniqueTaskSpy).toHaveBeenCalledWith(httpRequest.params.taskId);
+  });
 });
