@@ -69,4 +69,16 @@ describe("GetUniqueTaskController", () => {
 
     expect(response.statusCode).toBe(404);
   });
+
+  it("should return 500 if occurr on error", async () => {
+    const { sut, getUniqueTaskUseCase } = makeSut();
+
+    vi.spyOn(getUniqueTaskUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
