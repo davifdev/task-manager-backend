@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { task, taskCreated } from "../../__tests__/tasks/create-task";
+import { task, taskExample } from "../../__tests__/tasks/create-task";
 import { CreateTaskController } from "./create-task";
 
 describe("CreateTaskController", () => {
@@ -21,7 +21,7 @@ describe("CreateTaskController", () => {
   };
 
   const httpRequest = {
-    body: taskCreated,
+    body: taskExample,
   };
 
   it("should return 201 when task created successfully", async () => {
@@ -118,6 +118,6 @@ describe("CreateTaskController", () => {
 
     await sut.execute(httpRequest as any);
 
-    expect(createTaskSpy).toHaveBeenCalledWith(taskCreated);
+    expect(createTaskSpy).toHaveBeenCalledWith(taskExample);
   });
 });

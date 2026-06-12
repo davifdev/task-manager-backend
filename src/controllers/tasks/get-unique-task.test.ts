@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faker, th } from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import { task } from "../../__tests__/tasks/create-task";
 import { GetUniqueTaskController } from "./get-unique-task";
 import { TaskNotFound } from "../../helpers/errors";
