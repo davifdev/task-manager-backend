@@ -107,4 +107,13 @@ describe("UpdateTaskController", async () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if description is not string", async () => {
+    httpRequest.body.description = undefined as any;
+    const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
