@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faker } from "@faker-js/faker";
 import { taskUpdated } from "../../__tests__/tasks/create-task";
@@ -45,7 +46,7 @@ describe("UpdateTaskController", async () => {
   });
 
   it("should return 400 if title is not provided", async () => {
-    httpRequest.body.title = "";
+    httpRequest.body.title = undefined as any;
     const { sut } = makeSut();
 
     const response = await sut.execute(httpRequest as any);
@@ -54,7 +55,7 @@ describe("UpdateTaskController", async () => {
   });
 
   it("should return 400 if time is not provided", async () => {
-    httpRequest.body.time = "";
+    httpRequest.body.time = undefined as any;
     const { sut } = makeSut();
 
     const response = await sut.execute(httpRequest as any);
@@ -63,7 +64,7 @@ describe("UpdateTaskController", async () => {
   });
 
   it("should return 400 if status is not provided", async () => {
-    httpRequest.body.status = "";
+    httpRequest.body.status = undefined as any;
     const { sut } = makeSut();
 
     const response = await sut.execute(httpRequest as any);
@@ -72,7 +73,16 @@ describe("UpdateTaskController", async () => {
   });
 
   it("should return 400 if description is not provided", async () => {
-    httpRequest.body.description = "";
+    httpRequest.body.description = undefined as any;
+    const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 400 if title is not string", async () => {
+    httpRequest.body.description = 123 as any;
     const { sut } = makeSut();
 
     const response = await sut.execute(httpRequest as any);
