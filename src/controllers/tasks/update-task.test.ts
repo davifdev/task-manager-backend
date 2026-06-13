@@ -61,4 +61,13 @@ describe("UpdateTaskController", async () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if status is not provided", async () => {
+    httpRequest.body.status = "";
+    const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
