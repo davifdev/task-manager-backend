@@ -27,7 +27,7 @@ describe("UpdateTaskController", async () => {
     body: taskUpdated,
   };
 
-  it("should return 200 if task updated with successfully", async () => {
+  it("should return 200 if task updated successfully", async () => {
     const { sut } = makeSut();
 
     const response = await sut.execute(httpRequest as any);
@@ -36,102 +36,130 @@ describe("UpdateTaskController", async () => {
   });
 
   it("should return 400 if taskId is not valid", async () => {
-    httpRequest.params.taskId = "";
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      params: {
+        taskId: "",
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
-  it("should return 400 if title is not provided", async () => {
-    httpRequest.body.title = undefined as any;
+  it("should return 400 if field is not allowed", async () => {
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
-
-    expect(response.statusCode).toBe(400);
-  });
-
-  it("should return 400 if time is not provided", async () => {
-    httpRequest.body.time = undefined as any;
-    const { sut } = makeSut();
-
-    const response = await sut.execute(httpRequest as any);
-
-    expect(response.statusCode).toBe(400);
-  });
-
-  it("should return 400 if status is not provided", async () => {
-    httpRequest.body.status = undefined as any;
-    const { sut } = makeSut();
-
-    const response = await sut.execute(httpRequest as any);
-
-    expect(response.statusCode).toBe(400);
-  });
-
-  it("should return 400 if description is not provided", async () => {
-    httpRequest.body.description = undefined as any;
-    const { sut } = makeSut();
-
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        anyField: "",
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
   it("should return 400 if title is not string", async () => {
-    httpRequest.body.description = 123 as any;
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        title: 123,
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
-  it("should return 400 if time is not (morning,afternoon, evening)", async () => {
-    httpRequest.body.time = undefined as any;
+  it("should return 400 if times is not (morning, afternoon, evening)", async () => {
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        time: "any_time",
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
   it("should return 400 if status is not (is_pending, in_progress, is_completed)", async () => {
-    httpRequest.body.status = undefined as any;
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        status: "any_time",
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
   it("should return 400 if description is not string", async () => {
-    httpRequest.body.description = 123 as any;
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        description: 123,
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
   it("should return 400 if description is not valid", async () => {
-    httpRequest.body.description = undefined as any;
     const { sut } = makeSut();
 
-    const response = await sut.execute(httpRequest as any);
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        description: "12",
+      },
+    } as any);
 
     expect(response.statusCode).toBe(400);
   });
 
-  it("should return 400 if task is not found", async () => {
+  it("should call UpdateTaskUseCase with correct params", async () => {
+    const { sut, updateTaskUseCase } = makeSut();
+
+    const updateTaskSpy = vi
+      .spyOn(updateTaskUseCase, "execute")
+      .mockResolvedValue(taskUpdated);
+
+    await sut.execute(httpRequest as any);
+
+    expect(updateTaskSpy).toHaveBeenCalledWith(
+      httpRequest.params.taskId,
+      httpRequest.body,
+    );
+  });
+
+  it("should return 404 if task not found", async () => {
     const { sut, updateTaskUseCase } = makeSut();
 
     vi.spyOn(updateTaskUseCase, "execute").mockResolvedValue(null as any);
 
     const response = await sut.execute(httpRequest as any);
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(404);
+  });
+
+  it("should return 500 if occurrs on error", async () => {
+    const { sut, updateTaskUseCase } = makeSut();
+
+    vi.spyOn(updateTaskUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
   });
 });
