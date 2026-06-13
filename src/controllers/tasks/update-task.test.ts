@@ -89,4 +89,13 @@ describe("UpdateTaskController", async () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if time not (morning,afternoon, evening)", async () => {
+    httpRequest.body.time = undefined as any;
+    const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
