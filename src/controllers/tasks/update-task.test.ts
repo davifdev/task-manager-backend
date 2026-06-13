@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faker } from "@faker-js/faker";
 import { taskUpdated } from "../../__tests__/tasks/create-task";
@@ -109,8 +108,27 @@ describe("UpdateTaskController", async () => {
   });
 
   it("should return 400 if description is not string", async () => {
+    httpRequest.body.description = 123 as any;
+    const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 400 if description is not valid", async () => {
     httpRequest.body.description = undefined as any;
     const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("should return 400 if task is not found", async () => {
+    const { sut, updateTaskUseCase } = makeSut();
+
+    vi.spyOn(updateTaskUseCase, "execute").mockResolvedValue(null as any);
 
     const response = await sut.execute(httpRequest as any);
 
