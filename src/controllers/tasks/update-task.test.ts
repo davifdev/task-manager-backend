@@ -43,4 +43,13 @@ describe("UpdateTaskController", async () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if title is not provided", async () => {
+    httpRequest.body.title = "";
+    const { sut } = makeSut();
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
