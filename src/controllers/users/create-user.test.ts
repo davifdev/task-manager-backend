@@ -86,4 +86,18 @@ describe("CreateUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if first_name is invalid format", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        first_name: "as",
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
