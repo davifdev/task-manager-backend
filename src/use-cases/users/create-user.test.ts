@@ -4,8 +4,7 @@ import { tokensReturn, user, userParams } from "../../__tests__/user";
 import { CreateUserUseCase } from "./create-user";
 
 describe("CreateUserUseCase", () => {
-  const idGenetare = faker.string.uuid();
-
+  const idGenerate = faker.string.uuid();
   class CreateUserRepositoryStub {
     async execute() {
       return user;
@@ -13,8 +12,8 @@ describe("CreateUserUseCase", () => {
   }
 
   class GenerateIdAdapter {
-    async execute() {
-      return idGenetare;
+    execute() {
+      return idGenerate;
     }
   }
 
@@ -47,5 +46,20 @@ describe("CreateUserUseCase", () => {
     const response = await sut.execute(userParams);
 
     expect(response).toStrictEqual({ ...user, tokens: { ...tokensReturn } });
+  });
+
+  it("should call CreateUserRepository with correct params", async () => {
+    const { sut, createUserRepository } = makeSut();
+
+    const createUserSpy = vi
+      .spyOn(createUserRepository, "execute")
+      .mockResolvedValue(user);
+
+    await sut.execute(userParams);
+
+    expect(createUserSpy).toHaveBeenCalledWith({
+      ...userParams,
+      id: idGenerate,
+    });
   });
 });
