@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { loginUserParams, loginUserReturn } from "../../__tests__/user";
-import { UserNotFoundError } from "../../helpers/errors";
+import {
+  EmailOrPasswordIsInvalid,
+  UserNotFoundError,
+} from "../../helpers/errors";
 import { LoginUserController } from "./login-user";
 
 describe("LoginUserController", () => {
@@ -91,5 +94,17 @@ describe("LoginUserController", () => {
     const response = await sut.execute(httpRequest as any);
 
     expect(response.statusCode).toBe(404);
+  });
+
+  it("should throw if EmailOrPasswordIsInvalid throws", async () => {
+    const { sut, loginUserUseCase } = makeSut();
+
+    vi.spyOn(loginUserUseCase, "execute").mockImplementation(() => {
+      throw new EmailOrPasswordIsInvalid();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(400);
   });
 });
