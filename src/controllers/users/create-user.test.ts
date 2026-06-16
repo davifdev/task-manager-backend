@@ -27,8 +27,21 @@ describe("CreateUserController", () => {
     const { sut } = makeSut();
 
     const response = await sut.execute(httpRequest as any);
-    console.log(response);
 
     expect(response.statusCode).toBe(201);
+  });
+
+  it("should return 400 if field first_name is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        first_name: undefined,
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
   });
 });
