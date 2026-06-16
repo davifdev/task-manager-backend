@@ -36,3 +36,10 @@ export const loginUserReturn = {
     refreshToken: "refresh_token",
   },
 };
+
+export const refreshTokenReturn = {
+  tokens: {
+    accessToken: "access_token",
+    refreshToken: "refresh_token",
+  },
+};
