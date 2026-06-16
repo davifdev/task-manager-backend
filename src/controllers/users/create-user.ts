@@ -1,20 +1,26 @@
 import { type Request } from "express";
 import type { CreateUserUseCase } from "../../use-cases/users/create-user";
 import type { BodyParamsCreateUser } from "../../models/users/create-user.model";
-import bcrypt from "bcrypt";
+
 import { badRequest, create, serverError } from "../helpers/http";
 import {
   checkIfEmailIsValid,
   checkIfParameterSizeIsValid,
   checkIfPasswordIsValid,
 } from "../../helpers/validation";
+import type { PasswordHasherAdapter } from "../../adapters/password-hasher";
 
 type RequiredFields = keyof BodyParamsCreateUser;
 export class CreateUserController {
   private readonly createUserUseCase;
+  private readonly passwordHasherAdapter;
 
-  constructor(createUserUseCase: CreateUserUseCase) {
+  constructor(
+    createUserUseCase: CreateUserUseCase,
+    passwordHasherAdapter: PasswordHasherAdapter,
+  ) {
     this.createUserUseCase = createUserUseCase;
+    this.passwordHasherAdapter = passwordHasherAdapter;
   }
 
   async execute(httpRequest: Request) {
@@ -60,7 +66,9 @@ export class CreateUserController {
         });
       }
 
-      const hashedPassword = await bcrypt.hash(params.password, 10);
+      const hashedPassword = await this.passwordHasherAdapter.execute(
+        params.password,
+      );
 
       const createdUser = {
         ...params,

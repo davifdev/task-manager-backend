@@ -9,17 +9,28 @@ describe("CreateUserController", () => {
     }
   }
 
+  class PasswordHasherAdapterStub {
+    async execute() {
+      return "password_hasher";
+    }
+  }
+
   const httpRequest = {
     body: userParams,
   };
 
   const makeSut = () => {
+    const passwordHasherAdapter = new PasswordHasherAdapterStub();
     const createUserUseCase = new CreateUserUseCaseSpy();
-    const sut = new CreateUserController(createUserUseCase as any);
+    const sut = new CreateUserController(
+      createUserUseCase as any,
+      passwordHasherAdapter as any,
+    );
 
     return {
       sut,
       createUserUseCase,
+      passwordHasherAdapter,
     };
   };
 
@@ -141,5 +152,20 @@ describe("CreateUserController", () => {
     } as any);
 
     expect(response.statusCode).toBe(400);
+  });
+
+  it("should call CreateUserUseCase with correctly params", async () => {
+    const { sut, createUserUseCase } = makeSut();
+
+    const createUseSpy = vi
+      .spyOn(createUserUseCase, "execute")
+      .mockResolvedValue(user);
+
+    await sut.execute(httpRequest as any);
+
+    expect(createUseSpy).toHaveBeenCalledWith({
+      ...userParams,
+      password: "password_hasher",
+    });
   });
 });
