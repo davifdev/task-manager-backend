@@ -1,5 +1,6 @@
 import type { GenerateTokensAdapter } from "../../adapters/generate-tokens";
 import type { VerifyTokenAdapter } from "../../adapters/verify-token";
+
 export class RefreshTokenUseCase {
   private readonly generateTokensAdapter;
   private readonly verifyTokenAdapter;

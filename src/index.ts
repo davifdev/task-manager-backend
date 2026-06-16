@@ -27,14 +27,14 @@ app.get("/api/tasks", authMiddleware, async (request, response) => {
 });
 
 app.get("/api/tasks/:taskId", authMiddleware, async (request, response) => {
-  const getUniqueTaskControlelr = getUniqueTaskFactory();
+  const getUniqueTaskControler = getUniqueTaskFactory();
 
-  const { body, statusCode } = await getUniqueTaskControlelr.execute(request);
+  const { body, statusCode } = await getUniqueTaskControler.execute(request);
 
   response.status(statusCode).json(body);
 });
 
-app.post("/api/tasks", async (request, response) => {
+app.post("/api/tasks", authMiddleware, async (request, response) => {
   const createTaskController = createTaskFactory();
 
   const { body, statusCode } = await createTaskController.execute(request);

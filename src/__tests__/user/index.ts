@@ -37,7 +37,7 @@ export const loginUserReturn = {
   },
 };
 
-export const refreshTokenReturn = {
+export const tokensReturn = {
   tokens: {
     accessToken: "access_token",
     refreshToken: "refresh_token",

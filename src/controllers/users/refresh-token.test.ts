@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { refreshTokenReturn } from "../../__tests__/user";
+import { JsonWebTokenError } from "jsonwebtoken";
+import { tokensReturn } from "../../__tests__/user";
 import { RefreshTokenController } from "./refresh-token";
 
 describe("RefreshTokenController", async () => {
   class RefreshTokenUseCaseStub {
     async execute() {
-      return refreshTokenReturn;
+      return tokensReturn;
     }
   }
 
@@ -38,7 +39,7 @@ describe("RefreshTokenController", async () => {
 
     const refreshTokenSpy = vi
       .spyOn(refreshTokenUseCase, "execute")
-      .mockResolvedValue(refreshTokenReturn);
+      .mockResolvedValue(tokensReturn);
 
     await sut.execute(httpRequest as any);
 
@@ -55,5 +56,17 @@ describe("RefreshTokenController", async () => {
     const response = await sut.execute(httpRequest as any);
 
     expect(response.statusCode).toBe(500);
+  });
+
+  it("should throw JsonWebTokenError throws", async () => {
+    const { sut, refreshTokenUseCase } = makeSut();
+
+    vi.spyOn(refreshTokenUseCase, "execute").mockImplementation(() => {
+      throw new JsonWebTokenError("jwt-error");
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(401);
   });
 });
