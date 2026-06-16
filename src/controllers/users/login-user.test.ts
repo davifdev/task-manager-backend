@@ -55,4 +55,16 @@ describe("LoginUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should call LoginUserUseCase with correct params", async () => {
+    const { sut, loginUserUseCase } = makeSut();
+
+    const loginUserSpy = vi
+      .spyOn(loginUserUseCase, "execute")
+      .mockResolvedValue(loginUserReturn);
+
+    await sut.execute(httpRequest as any);
+
+    expect(loginUserSpy).toHaveBeenCalledWith(loginUserParams);
+  });
 });
