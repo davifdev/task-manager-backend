@@ -60,6 +60,18 @@ describe("LoginUserUseCase", () => {
     });
   });
 
+  it("should call GetUserByEmailRepository with correct params", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+
+    const getUserSpy = vi
+      .spyOn(getUserByEmailRepository, "execute")
+      .mockResolvedValue(user);
+
+    await sut.execute(loginUserParams);
+
+    expect(getUserSpy).toHaveBeenCalledWith(loginUserParams.email);
+  });
+
   it("should throw UserNotFoundError if throws", async () => {
     const { sut, getUserByEmailRepository } = makeSut();
 
