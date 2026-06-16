@@ -10,13 +10,11 @@ describe("CreateUserUseCase", () => {
       return user;
     }
   }
-
   class GenerateIdAdapter {
     execute() {
       return idGenerate;
     }
   }
-
   class GenerateTokensAdapter {
     execute() {
       return tokensReturn;
@@ -61,5 +59,17 @@ describe("CreateUserUseCase", () => {
       ...userParams,
       id: idGenerate,
     });
+  });
+
+  it("should throw if throws error", async () => {
+    const { sut, createUserRepository } = makeSut();
+
+    vi.spyOn(createUserRepository, "execute").mockImplementation(() => {
+      throw Error();
+    });
+
+    const promise = sut.execute(userParams);
+
+    expect(promise).rejects.toThrow();
   });
 });
