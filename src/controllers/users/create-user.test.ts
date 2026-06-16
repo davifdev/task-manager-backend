@@ -168,4 +168,16 @@ describe("CreateUserController", () => {
       password: "password_hasher",
     });
   });
+
+  it("should return 500 if occurrs on error", async () => {
+    const { sut, createUserUseCase } = makeSut();
+
+    vi.spyOn(createUserUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
