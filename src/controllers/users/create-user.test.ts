@@ -114,4 +114,18 @@ describe("CreateUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if email is invalid format", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        email: "invalid_email",
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
