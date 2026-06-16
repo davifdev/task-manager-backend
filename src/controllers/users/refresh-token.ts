@@ -13,7 +13,7 @@ export class RefreshTokenController {
   async execute(httpRequest: Request) {
     try {
       const params = httpRequest.body;
-      console.log("token", params.refreshToken);
+
       const result = await this.refreshTokenUseCase.execute(
         params.refreshToken,
       );
