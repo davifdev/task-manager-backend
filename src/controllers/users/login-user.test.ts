@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { loginUserParams, loginUserReturn } from "../../__tests__/user";
+import { UserNotFoundError } from "../../helpers/errors";
 import { LoginUserController } from "./login-user";
 
 describe("LoginUserController", () => {
@@ -66,5 +67,17 @@ describe("LoginUserController", () => {
     await sut.execute(httpRequest as any);
 
     expect(loginUserSpy).toHaveBeenCalledWith(loginUserParams);
+  });
+
+  it("should return 500 if occurrss on error", async () => {
+    const { sut, loginUserUseCase } = makeSut();
+
+    vi.spyOn(loginUserUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
   });
 });
