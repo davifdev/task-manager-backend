@@ -58,4 +58,18 @@ describe("CreateUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if field email is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        email: undefined,
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
