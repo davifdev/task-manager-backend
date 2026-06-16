@@ -44,4 +44,16 @@ describe("RefreshTokenController", async () => {
 
     expect(refreshTokenSpy).toHaveBeenCalledWith(httpRequest.body.refreshToken);
   });
+
+  it("should return 500 if occurrs on error", async () => {
+    const { sut, refreshTokenUseCase } = makeSut();
+
+    vi.spyOn(refreshTokenUseCase, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(500);
+  });
 });
