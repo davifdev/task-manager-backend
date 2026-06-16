@@ -80,4 +80,16 @@ describe("LoginUserController", () => {
 
     expect(response.statusCode).toBe(500);
   });
+
+  it("should throw if UserNotFoundError throws", async () => {
+    const { sut, loginUserUseCase } = makeSut();
+
+    vi.spyOn(loginUserUseCase, "execute").mockImplementation(() => {
+      throw new UserNotFoundError(loginUserParams.email);
+    });
+
+    const response = await sut.execute(httpRequest as any);
+
+    expect(response.statusCode).toBe(404);
+  });
 });
