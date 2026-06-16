@@ -72,4 +72,18 @@ describe("CreateUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if field password is not provided", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        password: undefined,
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
