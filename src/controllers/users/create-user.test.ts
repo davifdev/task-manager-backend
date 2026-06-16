@@ -128,4 +128,18 @@ describe("CreateUserController", () => {
 
     expect(response.statusCode).toBe(400);
   });
+
+  it("should return 400 if password is invalid format", async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.execute({
+      ...httpRequest,
+      body: {
+        ...httpRequest.body,
+        password: "12345",
+      },
+    } as any);
+
+    expect(response.statusCode).toBe(400);
+  });
 });
