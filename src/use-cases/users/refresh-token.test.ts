@@ -44,10 +44,22 @@ describe("RefreshTokenController", () => {
     });
   });
 
-  it("should thow if VerifyTokenAdapter throws", async () => {
+  it("should throw if VerifyTokenAdapter throws", async () => {
     const { sut, verifyTokenAdapter } = makeSut();
 
     vi.spyOn(verifyTokenAdapter, "execute").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const promise = sut.execute(refreshToken);
+
+    expect(promise).rejects.toThrow();
+  });
+
+  it("should throw if GenerateTokensAdapter throws", async () => {
+    const { sut, generateTokensAdapter } = makeSut();
+
+    vi.spyOn(generateTokensAdapter, "execute").mockImplementation(() => {
       throw new Error();
     });
 
