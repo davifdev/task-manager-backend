@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { throws } from "node:assert";
 import { DeleteTasksManyUseCase } from "./delete-task-many";
 
 describe("DeleteTaskManyUseCase", () => {
