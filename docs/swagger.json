@@ -1,0 +1,540 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Task Manager API",
+    "descripton": "API for management of task on demand",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/users/signin": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginUserParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "schema": {
+              "$ref": "#/definitions/UserWithToken"
+            }
+          },
+          "400": {
+            "description": "Invalid params",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/signup": {
+      "post": {
+        "summary": "Create a new user",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateUserParams"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created in successfully",
+            "schema": {
+              "$ref": "#/definitions/UserWithToken"
+            }
+          },
+          "400": {
+            "description": "Invalid params",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/refresh-token": {
+      "post": {
+        "summary": "Refresh Token",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RefreshTokenParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token generated successfully",
+            "schema": {
+              "$ref": "#/definitions/Tokens"
+            }
+          },
+          "401": {
+            "description": "Invalid Token",
+            "schema": {
+              "$ref": "#/definitions/UnauthorizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "summary": "Get tasks",
+        "tags": ["Tasks"],
+        "responses": {
+          "200": {
+            "description": "Tasks returned when successfully",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          },
+          "400": {
+            "description": "Invalid params",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "404": {
+            "description": "Task not found",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new task",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateTaskParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task created successfully",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          },
+          "400": {
+            "description": "Invalid params",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks/:taskId": {
+      "get": {
+        "summary": "Get a unique task",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "required": true,
+            "type": "string",
+            "description": "taskId of the task"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task returned when successfully",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          },
+          "400": {
+            "description": "Invalid params",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "404": {
+            "description": "Task not found",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a task",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "required": true,
+            "type": "string",
+            "description": "taskId of the task"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/CreateTaskParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated task successfully",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          },
+          "400": {
+            "description": "Invalid params",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "404": {
+            "description": "Task not found",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a task",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "taskId",
+            "required": true,
+            "type": "string",
+            "description": "taskId of the task"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted task successfully",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          },
+
+          "404": {
+            "description": "Task not found",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      }
+    },
+    "/api/delete-many": {
+      "delete": {
+        "summary": "Delete all tasks",
+        "tags": ["Tasks"],
+        "responses": {
+          "200": {
+            "description": "all tasks deleted when successfully",
+            "schema": {
+              "$ref": "#/definitions/DeleteAllTasks"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/InternalServerError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LoginUserParams": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "jhondoe@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "6f510992-e437-4714-8918-025010a60f3d"
+        },
+        "first_name": {
+          "type": "string",
+          "example": "Jhon"
+        },
+        "last_name": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhondoe@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        }
+      }
+    },
+    "CreateUserParams": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "example": "Jhon"
+        },
+        "last_name": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jhondoe@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        }
+      }
+    },
+    "UserWithToken": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/User"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tokens": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNzIwOTI1Ni1mNmI5LTQwZTgtYjZlNy0wNDRiZWQxODFjODEiLCJpYXQiOjE3ODA2NzUxMzIsImV4cCI6MTc4MDY3NjAzMn0.FhxS5xIzyCkVoq44bCcFCIy4KMrH2YKpX8kmH1x4ljk"
+                },
+                "refreshToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNzIwOTI1Ni1mNmI5LTQwZTgtYjZlNy0wNDRiZWQxODFjODEiLCJpYXQiOjE3ODA2NzUxMzIsImV4cCI6MTc4MDY3NjAzMn0.FhxS5xIzyCkVoq44bCcFCIy4KMrH2YKpX8kmH1x4ljk"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "InternalServerError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Internal Server Error"
+        }
+      }
+    },
+    "UnauthorizedError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Unauthorized"
+        }
+      }
+    },
+    "BadRequest": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Invalid params"
+        }
+      }
+    },
+    "NotFound": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Task not found"
+        }
+      }
+    },
+    "RefreshTokenParams": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string",
+          "required": "true",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNzIwOTI1Ni1mNmI5LTQwZTgtYjZlNy0wNDRiZWQxODFjODEiLCJpYXQiOjE3ODA2NzUxMzIsImV4cCI6MTc4MDY3NjAzMn0.FhxS5xIzyCkVoq44bCcFCIy4KMrH2YKpX8kmH1x4ljk"
+        }
+      }
+    },
+    "Tokens": {
+      "type": "object",
+      "properties": {
+        "tokens": {
+          "type": "object",
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNzIwOTI1Ni1mNmI5LTQwZTgtYjZlNy0wNDRiZWQxODFjODEiLCJpYXQiOjE3ODA2NzUxMzIsImV4cCI6MTc4MDY3NjAzMn0.FhxS5xIzyCkVoq44bCcFCIy4KMrH2YKpX8kmH1x4ljk"
+            },
+            "refreshToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNzIwOTI1Ni1mNmI5LTQwZTgtYjZlNy0wNDRiZWQxODFjODEiLCJpYXQiOjE3ODA2NzUxMzIsImV4cCI6MTc4MDY3NjAzMn0.FhxS5xIzyCkVoq44bCcFCIy4KMrH2YKpX8kmH1x4ljk"
+            }
+          }
+        }
+      }
+    },
+    "Task": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "6f510992-e437-4714-8918-025010a60f3d"
+        },
+        "user_id": {
+          "type": "string",
+          "example": "6f510992-e437-4714-8918-025010a60f3d"
+        },
+        "title": {
+          "type": "string",
+          "example": "Estudar progamação"
+        },
+        "status": {
+          "type": "string",
+          "example": "is_pending"
+        },
+        "time": {
+          "type": "string",
+          "example": "morning"
+        },
+        "description": {
+          "type": "string",
+          "example": "Estudar progamação durante 3 horas"
+        }
+      }
+    },
+    "CreateTaskParams": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "example": "6f510992-e437-4714-8918-025010a60f3d"
+        },
+        "title": {
+          "type": "string",
+          "example": "Estudar progamação"
+        },
+        "status": {
+          "type": "string",
+          "example": "is_pending"
+        },
+        "time": {
+          "type": "string",
+          "example": "morning"
+        },
+        "description": {
+          "type": "string",
+          "example": "Estudar progamação durante 3 horas"
+        }
+      }
+    },
+    "DeleteAllTasks": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "object",
+          "example": "[]"
+        }
+      }
+    }
+  }
+}
