@@ -6,24 +6,12 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL
 );
 
-CREATE TYPE task_status AS ENUM (
-  'is_pending',
-  'in_progress', 
-  'is_completed'
-);
-
-CREATE TYPE task_time AS ENUM (
-  'morning', 
-  'afternoon', 
-  'evening'
-);
-
 CREATE TABLE tasks (
   id UUID PRIMARY KEY NOT NULL,
   title VARCHAR(255),
   description TEXT,
-  status task_status,
-  time task_time,
+  status VARCHAR(100),
+  time VARCHAR(100),
 
   user_id UUID NOT NULL,
 

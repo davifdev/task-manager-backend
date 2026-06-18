@@ -5,10 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "migration": "npx tsx src/db/postgres/migrations/exec.ts",
-    "start:dev": "npx tsx --watch src/index.ts",
-    "test:dev": "dotenv -e .env-test -- vitest run --bail 1",
-    "test:watch": "dotenv -e .env-test -- vitest --bail 1",
+    "migration:test": "dotenv -e .env.test -- npx tsx src/db/postgres/migrations/exec.ts",
+    "migration:dev": "dotenv -e .env -- npx tsx src/db/postgres/migrations/exec.ts",
+    "start:dev": "dotenv -e .env -- tsx --watch src/index.ts",
+    "test:dev": "dotenv -e .env.test -- vitest run --bail 1",
+    "test:watch": "dotenv -e .env.test -- vitest --bail 1",
     "prepare": "husky"
   },
   "keywords": [],

@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { Pool } from "pg";
 
 export const pool = new Pool({
@@ -8,6 +7,8 @@ export const pool = new Pool({
   port: Number(process.env.POSTGRES_PORT),
   database: process.env.POSTGRES_DB,
 });
+
+console.log("minha porta", process.env.POSTGRES_PORT);
 
 export const PostgresClient = {
   query: async <T>(query: string, params?: T[]) => {
