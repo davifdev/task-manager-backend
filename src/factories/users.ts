@@ -1,6 +1,7 @@
 import { GenerateIdAdapter } from "../adapters/generate-id";
 import { GenerateTokensAdapter } from "../adapters/generate-tokens";
 import { PasswordCompareAdapter } from "../adapters/password-compare";
+import { PasswordHasherAdapter } from "../adapters/password-hasher";
 import { VerifyTokenAdapter } from "../adapters/verify-token";
 import { CreateUserController } from "../controllers/users/create-user";
 import { LoginUserController } from "../controllers/users/login-user";
@@ -14,13 +15,17 @@ import { RefreshTokenUseCase } from "../use-cases/users/refresh-token";
 export const createUserFactory = () => {
   const createUserRepository = new CreateUserRepository();
   const generateIdAdapter = new GenerateIdAdapter();
+  const passwordHasherAdapter = new PasswordHasherAdapter();
   const generateTokensAdapter = new GenerateTokensAdapter();
   const createUserUseCase = new CreateUserUseCase(
     createUserRepository,
     generateIdAdapter,
     generateTokensAdapter,
   );
-  const createUserController = new CreateUserController(createUserUseCase);
+  const createUserController = new CreateUserController(
+    createUserUseCase,
+    passwordHasherAdapter,
+  );
 
   return createUserController;
 };
