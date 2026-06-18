@@ -7,7 +7,7 @@ import {
 
 export const userRouter = Router();
 
-userRouter.post("/api/users/signin", async (request, response) => {
+userRouter.post("/signin", async (request, response) => {
   const loginUserController = loginUserFactory();
 
   const { body, statusCode } = await loginUserController.execute(request);
@@ -15,7 +15,7 @@ userRouter.post("/api/users/signin", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-userRouter.post("/api/users/signup", async (request, response) => {
+userRouter.post("/signup", async (request, response) => {
   const createUserController = createUserFactory();
 
   const { body, statusCode } = await createUserController.execute(request);
@@ -23,7 +23,7 @@ userRouter.post("/api/users/signup", async (request, response) => {
   response.status(statusCode).json(body);
 });
 
-userRouter.post("/api/users/refresh-token", async (request, response) => {
+userRouter.post("/refresh-token", async (request, response) => {
   const refreshTokenController = refreshTokenFactory();
 
   const { body, statusCode } = await refreshTokenController.execute(request);

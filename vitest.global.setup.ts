@@ -3,9 +3,6 @@ import { execSync } from "child_process";
 
 export async function setup() {
   execSync("docker compose up -d --wait postgres-test");
-
-  await PostgresClient.query("DELETE FROM users");
-  await PostgresClient.query("DELETE FROM tasks");
 }
 
 export async function teardown() {

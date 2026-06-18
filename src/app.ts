@@ -1,7 +1,7 @@
 import express from "express";
 
-import { userRouter } from "./routes/user-route";
-import { tasksRouter } from "./routes/tasks-route";
+import { userRouter } from "./routes/users";
+import { tasksRouter } from "./routes/tasks";
 
 const app = express();
 app.use(express.json());
