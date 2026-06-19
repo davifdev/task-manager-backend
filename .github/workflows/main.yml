@@ -19,7 +19,7 @@ jobs:
           POSTGRES_DB: task_manager_db
 
         ports:
-          - 5433:5432
+          - 5434:5432
 
         options: >-
           --health-cmd pg_isready --health-interval 10s --health-timeout 5s
@@ -36,7 +36,7 @@ jobs:
 
       - name: Create enviroment file
         run: |
-          echo "DATABASE_URL=postgres://root:password@localhost:5433/task_manager_db" >> .env.test
+          echo "DATABASE_URL=postgres://root:password@localhost:5434/task_manager_db" >> .env.test
           echo "SECRET_KEY=secret_access_key" >> .env.test
           echo "SECRET_REFRESH_KEY=secret_refresh_key" >> .env.test
 
