@@ -9,6 +9,22 @@ jobs:
   check:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: task_manager_db
+
+        ports:
+          - 5433:5432
+
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,9 +36,9 @@ jobs:
 
       - name: Create enviroment file
         run: |
-          echo "DATABASE_URL=postgresql://root:password@127.0.0.1:5433/task_manager_db" >> .env.test
-          echo "SECRET_KEY="secret_access_key" >> .env.test
-          echo "SECRET_REFRESH_KEY="secret_refresh_key" >> .env.test
+          echo "DATABASE_URL=postgres://root:password@localhost:5433/task_manager_db" >> .env.test
+          echo "SECRET_KEY=secret_access_key" >> .env.test
+          echo "SECRET_REFRESH_KEY=secret_refresh_key" >> .env.test
 
       - name: Install dependencies
         run: npm ci --include=dev
@@ -73,4 +89,4 @@ jobs:
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          curl: "$deploy_url"
+          curl "$deploy_url"
