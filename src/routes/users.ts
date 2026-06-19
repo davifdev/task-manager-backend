@@ -1,9 +1,11 @@
 import { Router } from "express";
 import {
   createUserFactory,
+  getUserByIdFactory,
   loginUserFactory,
   refreshTokenFactory,
 } from "../factories/users";
+import { authMiddleware } from "../middlewares/auth";
 
 export const userRouter = Router();
 
@@ -27,6 +29,14 @@ userRouter.post("/refresh-token", async (request, response) => {
   const refreshTokenController = refreshTokenFactory();
 
   const { body, statusCode } = await refreshTokenController.execute(request);
+
+  response.status(statusCode).json(body);
+});
+
+userRouter.get("/get-user", authMiddleware, async (request, response) => {
+  const getUserByIdController = getUserByIdFactory();
+
+  const { body, statusCode } = await getUserByIdController.execute(request);
 
   response.status(statusCode).json(body);
 });

@@ -4,11 +4,14 @@ import { PasswordCompareAdapter } from "../adapters/password-compare";
 import { PasswordHasherAdapter } from "../adapters/password-hasher";
 import { VerifyTokenAdapter } from "../adapters/verify-token";
 import { CreateUserController } from "../controllers/users/create-user";
+import { GetUserByIdController } from "../controllers/users/get-user-by-id";
 import { LoginUserController } from "../controllers/users/login-user";
 import { RefreshTokenController } from "../controllers/users/refresh-token";
 import { CreateUserRepository } from "../repositories/user/create-user";
 import { GetUserByEmailRepository } from "../repositories/user/get-user-by-email";
+import { GetUserByIdRepository } from "../repositories/user/get-user-by-id";
 import { CreateUserUseCase } from "../use-cases/users/create-user";
+import { GetUserByIdUseCase } from "../use-cases/users/get-user-by-id";
 import { LoginUserUseCase } from "../use-cases/users/login-user";
 import { RefreshTokenUseCase } from "../use-cases/users/refresh-token";
 
@@ -56,4 +59,12 @@ export const refreshTokenFactory = () => {
   );
 
   return refreshTokenController;
+};
+
+export const getUserByIdFactory = () => {
+  const getUserByIdRepository = new GetUserByIdRepository();
+  const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository);
+  const getUserByIdController = new GetUserByIdController(getUserByIdUseCase);
+
+  return getUserByIdController;
 };
