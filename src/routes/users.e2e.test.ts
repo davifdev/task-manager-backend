@@ -31,4 +31,14 @@ describe("UsersRoutes (e2e)", () => {
 
     expect(response.status).toBe(200);
   });
+
+  it("GET /api/user/get-user return 200 if user returns when success", async () => {
+    const user = await request(app).post("/api/users/signup").send(userParams);
+
+    const response = await request(app)
+      .get("/api/users/get-user")
+      .set("Authorization", `Bearer ${user.body.tokens.accessToken}`);
+
+    expect(response.status).toBe(200);
+  });
 });
