@@ -20,7 +20,7 @@ jobs:
 
       - name: Create enviroment file
         run: |
-          echo "DATABASE_URL=postgresql://root:password@localhost:5433/task_manager_db" >> .env.test
+          echo "DATABASE_URL=postgresql://root:password@127.0.0.1:5433/task_manager_db" >> .env.test
           echo "SECRET_KEY="secret_access_key" >> .env.test
           echo "SECRET_REFRESH_KEY="secret_refresh_key" >> .env.test
 
