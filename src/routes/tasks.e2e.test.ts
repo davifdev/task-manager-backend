@@ -10,7 +10,7 @@ describe("TasksRoutes (e2e)", () => {
     await request(app)
       .post("/api/tasks")
       .set("Authorization", `Bearer ${user.body.tokens.accessToken}`)
-      .send({ ...taskExample, user_id: user.body.id });
+      .send({ ...taskExample });
 
     const response = await request(app)
       .get("/api/tasks")
