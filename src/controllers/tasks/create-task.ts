@@ -14,13 +14,13 @@ export class CreateTaskController {
   async execute(httpRequest: Request) {
     try {
       const params: BodyParams = httpRequest.body;
+      const userId = httpRequest.userId as string;
 
       const requiredFields: RequiredFields[] = [
         "title",
         "time",
         "status",
         "description",
-        "user_id",
       ];
 
       for (const field of requiredFields) {
@@ -29,7 +29,10 @@ export class CreateTaskController {
         }
       }
 
-      const result = await this.createTaskUseCase.execute(params);
+      const result = await this.createTaskUseCase.execute({
+        ...params,
+        user_id: userId,
+      });
 
       return create(result);
     } catch (error) {
